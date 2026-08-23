@@ -67,6 +67,11 @@ app.get('/', (req, res) => {
   res.redirect('/auth/login');
 });
 
+app.use("/health",(req,res)=>{
+  res.status(200).json({
+    message:"All Is Good"
+  })
+})
 // Mount modular routes
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
