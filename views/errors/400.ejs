@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+
+<div class="container text-center py-5" style="max-width: 600px;">
+  <div class="cse-card p-5 border-warning border-opacity-50">
+    <div class="d-inline-flex p-3 rounded-circle bg-warning bg-opacity-10 text-warning mb-3">
+      <i class="fa-solid fa-triangle-exclamation fa-3x"></i>
+    </div>
+    <h2 class="fw-bold text-white mb-2">400 - Invalid Request</h2>
+    <p class="text-secondary mb-4"><%= typeof message !== 'undefined' ? message : 'The input provided failed validation checks.' %></p>
+    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">
+      <i class="fa-solid fa-arrow-left me-1"></i> Go Back
+    </a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

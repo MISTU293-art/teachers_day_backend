@@ -1,0 +1,129 @@
+<%- include('../partials/header') %>
+
+<div class="page-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+  <div>
+    <a href="/students" class="btn btn-light btn-sm mb-2"><i class="fa-solid fa-arrow-left me-1"></i>Back to Directory</a>
+    <h4 class="page-title mb-1"><i class="fa-solid fa-user-plus me-2 text-primary"></i>Add New Student</h4>
+    <p class="page-subtitle mb-0">Register a student and optionally record their contribution right away</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger py-2 small mb-4">
+            <i class="fa-solid fa-circle-exclamation me-2"></i><%= error %>
+          </div>
+        <% } %>
+
+        <form action="/students" method="POST">
+
+          <!-- Student Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Student Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. Rahul Sharma" required
+              value="<%= formData.name || '' %>">
+          </div>
+
+          <!-- Academic Year -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Academic Year <span class="text-danger">*</span></label>
+            <select name="year" class="form-select" required id="yearSelect" onchange="handleYearChange(this.value)">
+              <option value="">Select Year</option>
+              <% years.forEach(y => { %>
+                <option value="<%= y %>" <%= formData.year === y ? 'selected' : '' %>><%= y %></option>
+              <% }) %>
+            </select>
+            <div id="firstYearNote" class="form-text text-danger mt-1 d-none">
+              <i class="fa-solid fa-ban me-1"></i>1st-year students are <strong>not eligible</strong> for contribution. Amount will be ₹0.
+            </div>
+          </div>
+
+          <!-- Contribution Amount -->
+          <div class="mb-3" id="amountSection">
+            <label class="form-label fw-semibold">Contribution Amount (₹)</label>
+            <div class="input-group">
+              <span class="input-group-text fw-bold">₹</span>
+              <input type="number" name="amount" id="amountInput" class="form-control" placeholder="e.g. 200"
+                min="0" step="any" value="<%= formData.amount || '' %>">
+            </div>
+            <div class="form-text text-muted small mt-1">
+              <i class="fa-solid fa-user-shield me-1 text-primary"></i>Collector will be automatically recorded as:
+              <strong class="text-primary"><%= currentUser.name %></strong>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="mb-4" id="paymentSection">
+            <label class="form-label fw-semibold">Payment Method</label>
+            <select name="paymentMethod" class="form-select">
+              <% paymentMethods.forEach(pm => { %>
+                <option value="<%= pm %>" <%= formData.paymentMethod === pm ? 'selected' : '' %>><%= pm %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <!-- Divider -->
+          <div class="border-top pt-3 mb-3">
+            <p class="text-muted small mb-0 fw-semibold"><i class="fa-solid fa-circle-info me-1"></i>Optional details (Roll/Reg auto-generated if blank)</p>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label fw-semibold small">Roll Number</label>
+              <input type="text" name="rollNumber" class="form-control form-control-sm font-monospace text-uppercase"
+                placeholder="Auto-generated" value="<%= formData.rollNumber || '' %>">
+            </div>
+            <div class="col-6">
+              <label class="form-label fw-semibold small">Section</label>
+              <input type="text" name="section" class="form-control form-control-sm text-uppercase"
+                placeholder="A" value="<%= formData.section || 'A' %>" maxlength="2">
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="d-flex gap-2 pt-3">
+            <a href="/students" class="btn btn-light flex-grow-1">Cancel</a>
+            <button type="submit" class="btn btn-primary flex-grow-1 fw-semibold">
+              <i class="fa-solid fa-check me-1"></i>Save Student
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function handleYearChange(year) {
+  const note = document.getElementById('firstYearNote');
+  const amountInput = document.getElementById('amountInput');
+  const amountSection = document.getElementById('amountSection');
+  const paymentSection = document.getElementById('paymentSection');
+
+  if (year === '1st Year') {
+    note.classList.remove('d-none');
+    amountInput.value = '0';
+    amountInput.disabled = true;
+    amountSection.style.opacity = '0.5';
+    paymentSection.style.opacity = '0.5';
+  } else {
+    note.classList.add('d-none');
+    amountInput.disabled = false;
+    amountInput.value = '';
+    amountSection.style.opacity = '1';
+    paymentSection.style.opacity = '1';
+  }
+}
+// On page load, apply if year is pre-selected
+window.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('yearSelect');
+  if (sel.value) handleYearChange(sel.value);
+});
+</script>
+
+<%- include('../partials/footer') %>

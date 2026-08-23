@@ -1,0 +1,108 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+  <div>
+    <h4 class="fw-bold text-black mb-1"><i class="fa-solid fa-shield-halved text-danger me-2"></i>Security Audit Trail</h4>
+    <p class="text-secondary small mb-0">Immutable tracking of financial operations, access events, and administrative actions</p>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="cse-card p-3 mb-4">
+  <form action="/audit" method="GET" class="row g-2 align-items-center">
+    <div class="col-12 col-md-4">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-search"></i></span>
+        <input type="text" name="search" class="form-control cse-input" placeholder="Search user, action, IP..." value="<%= query.search || '' %>">
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <select name="module" class="form-select form-select-sm cse-input">
+        <option value="">All Security Modules</option>
+        <% modules.forEach(m => { %>
+          <option value="<%= m %>" <%= query.module === m ? 'selected' : '' %>><%= m %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <select name="action" class="form-select form-select-sm cse-input">
+        <option value="">All Action Types</option>
+        <% actions.forEach(a => { %>
+          <option value="<%= a %>" <%= query.action === a ? 'selected' : '' %>><%= a %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-2 d-flex gap-2">
+      <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+        <i class="fa-solid fa-filter me-1"></i> Filter
+      </button>
+      <% if (query.search || query.module || query.action) { %>
+        <a href="/audit" class="btn btn-outline-secondary btn-sm" title="Clear Filters">
+          <i class="fa-solid fa-xmark"></i>
+        </a>
+      <% } %>
+    </div>
+  </form>
+</div>
+
+<!-- Logs Table -->
+<div class="cse-table-wrapper">
+  <div class="table-responsive">
+    <table class="cse-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Module</th>
+          <th>Description</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (logs && logs.length > 0) { %>
+          <% logs.forEach(log => { %>
+            <tr>
+              <td class="text-secondary small font-monospace" style="white-space: nowrap;">
+                <%= new Date(log.createdAt).toLocaleString('en-IN') %>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-1">
+                  <span class="fw-semibold text-black small"><%= log.userName %></span>
+                  <span class="badge <%= log.userRole === 'superadmin' ? 'bg-danger' : 'bg-secondary' %> text-uppercase" style="font-size: 0.6rem;">
+                    <%= log.userRole %>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <span class="code-tag" style="font-size: 0.72rem;"><%= log.action %></span>
+              </td>
+              <td>
+                <span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.7rem;">
+                  <%= log.module %>
+                </span>
+              </td>
+              <td class="text-black small">
+                <%= log.description %>
+              </td>
+              <td class="text-secondary small font-monospace">
+                <%= log.ipAddress || '127.0.0.1' %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="text-center text-secondary py-4">No audit logs found.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/pagination') %>
+
+<%- include('../partials/footer') %>

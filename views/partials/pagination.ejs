@@ -1,0 +1,50 @@
+<% if (typeof pagination !== 'undefined' && pagination.totalPages > 1) { %>
+  <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mt-4 pt-3 border-top border-secondary border-opacity-25">
+    <div class="text-secondary small">
+      Showing <span class="text-light fw-semibold"><%= ((pagination.currentPage - 1) * pagination.limit) + 1 %></span>
+      to <span class="text-light fw-semibold"><%= Math.min(pagination.currentPage * pagination.limit, pagination.totalRecords) %></span>
+      of <span class="text-light fw-semibold"><%= pagination.totalRecords %></span> records
+    </div>
+
+    <nav aria-label="Table navigation">
+      <ul class="pagination pagination-sm mb-0">
+        <!-- Previous Page -->
+        <li class="page-item <%= !pagination.hasPrevPage ? 'disabled' : '' %>">
+          <%
+            const prevQuery = Object.assign({}, query || {}, { page: pagination.prevPage });
+            const prevUrl = '?' + new URLSearchParams(prevQuery).toString();
+          %>
+          <a class="page-link bg-dark text-secondary border-secondary" href="<%= pagination.hasPrevPage ? prevUrl : '#' %>">
+            <i class="fa-solid fa-chevron-left me-1"></i> Prev
+          </a>
+        </li>
+
+        <!-- Page Numbers -->
+        <%
+          let startPage = Math.max(1, pagination.currentPage - 2);
+          let endPage = Math.min(pagination.totalPages, pagination.currentPage + 2);
+          for (let p = startPage; p <= endPage; p++) {
+            const pageQuery = Object.assign({}, query || {}, { page: p });
+            const pageUrl = '?' + new URLSearchParams(pageQuery).toString();
+        %>
+          <li class="page-item <%= p === pagination.currentPage ? 'active' : '' %>">
+            <a class="page-link <%= p === pagination.currentPage ? 'bg-primary border-primary text-white' : 'bg-dark text-secondary border-secondary' %>" href="<%= pageUrl %>">
+              <%= p %>
+            </a>
+          </li>
+        <% } %>
+
+        <!-- Next Page -->
+        <li class="page-item <%= !pagination.hasNextPage ? 'disabled' : '' %>">
+          <%
+            const nextQuery = Object.assign({}, query || {}, { page: pagination.nextPage });
+            const nextUrl = '?' + new URLSearchParams(nextQuery).toString();
+          %>
+          <a class="page-link bg-dark text-secondary border-secondary" href="<%= pagination.hasNextPage ? nextUrl : '#' %>">
+            Next <i class="fa-solid fa-chevron-right ms-1"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+<% } %>

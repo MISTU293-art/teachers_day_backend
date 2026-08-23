@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+
+<div class="container" style="max-width: 700px;">
+  <!-- Action Bar -->
+  <div class="d-flex align-items-center justify-content-between mb-4 no-print">
+    <a href="/invitations" class="btn btn-outline-secondary btn-sm">
+      <i class="fa-solid fa-arrow-left me-1"></i> Back to Invitations
+    </a>
+    <div class="d-flex gap-2">
+      <button onclick="window.print()" class="btn btn-info btn-sm fw-semibold">
+        <i class="fa-solid fa-print me-1"></i> Print Card
+      </button>
+      <a href="/invitations/<%= invitation._id %>/pdf" target="_blank" class="btn btn-primary btn-sm fw-semibold">
+        <i class="fa-solid fa-file-pdf me-1"></i> Download PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- Invitation Card View -->
+  <div class="invitation-card-container">
+    <div class="invitation-card theme-<%= invitation.theme || 'cyber-gold' %> text-center">
+      <!-- Badge -->
+      <div class="card-header-badge mb-2">
+        <i class="fa-solid fa-graduation-cap me-1"></i> Teachers' Day 2026
+      </div>
+
+      <h6 class="text-uppercase tracking-widest text-secondary small mb-1" style="letter-spacing: 0.15em;">
+        <%= invitation.department %>
+      </h6>
+
+      <div class="my-3">
+        <span class="text-secondary small d-block">Cordially Inviting Respected</span>
+        <h2 class="card-teacher-name mb-1"><%= invitation.teacherName %></h2>
+        <span class="badge bg-dark border border-secondary text-info px-3 py-1"><%= invitation.designation %></span>
+      </div>
+
+      <!-- Quote message -->
+      <div class="card-quote-box text-start">
+        <i class="fa-solid fa-quote-left text-info me-2 opacity-50"></i>
+        <%= invitation.message %>
+      </div>
+
+      <!-- Event details -->
+      <div class="card-event-details text-start">
+        <div class="row g-2 small">
+          <div class="col-12 col-md-4">
+            <i class="fa-solid fa-calendar-day text-info me-1"></i> <strong><%= invitation.eventDate %></strong>
+          </div>
+          <div class="col-12 col-md-4">
+            <i class="fa-solid fa-clock text-info me-1"></i> <%= invitation.eventTime %>
+          </div>
+          <div class="col-12 col-md-4">
+            <i class="fa-solid fa-location-dot text-danger me-1"></i> <%= invitation.venue %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programmer Joke Box -->
+      <% if (invitation.joke) { %>
+        <div class="card-joke-box text-start mb-4">
+          <div class="small fw-bold text-info mb-1"><i class="fa-solid fa-code me-1"></i> A small CSE joke:</div>
+          <div class="fst-italic">"<%= invitation.joke %>"</div>
+        </div>
+      <% } %>
+
+      <div class="pt-3 border-top border-secondary border-opacity-25">
+        <p class="text-light small mb-0">With Deep Respect & Admiration,</p>
+        <strong class="text-info">All Students of CSE Department</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

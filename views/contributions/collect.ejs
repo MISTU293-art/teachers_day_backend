@@ -1,0 +1,146 @@
+<%- include('../partials/header') %>
+
+  <div class="container" style="max-width: 800px;">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-2">
+      <div>
+        <h4 class="fw-bold text-black mb-1"><i class="fa-solid fa-bolt text-warning me-2"></i>Money Collection Terminal
+        </h4>
+        <p class="text-secondary small mb-0">Record student Teachers' Day contribution in real-time</p>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-dark border border-secondary text-secondary">
+          <i class="fa-solid fa-user-tag text-info me-1"></i> Collector: <strong class="text-white">
+            <%= currentUser.name %>
+          </strong>
+        </span>
+      </div>
+    </div>
+
+    <div id="collectionAlertContainer"></div>
+
+    <!-- Step 1: Student Search Autocomplete -->
+    <div class="cse-card p-4 mb-4">
+      <label class="form-label text-dark fw-bold mb-2">
+        <i class="fa-solid fa-magnifying-glass text-primary me-2"></i>Step 1: Search & Select Student
+      </label>
+      <div class="position-relative">
+        <input type="text" id="studentSearchInput" class="form-control cse-input form-control-lg"
+          placeholder="Type student name, roll number, or reg number..." autocomplete="off"
+          value="<%= selectedStudent ? selectedStudent.name + ' (' + selectedStudent.rollNumber + ')' : '' %>">
+        <!-- Search dropdown list -->
+        <div id="searchResults" class="list-group position-absolute w-100 mt-1 shadow-lg d-none"
+          style="z-index: 1050; max-height: 280px; overflow-y: auto;"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Selected Student Details & 1st-Year Guard -->
+    <div id="studentInfoCard" class="cse-card p-4 mb-4 <%= selectedStudent ? '' : 'd-none' %>">
+      <div
+        class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+        <h6 class="fw-bold text-black mb-0"><i class="fa-solid fa-id-card text-black me-2"></i>Student Verification</h6>
+        <span id="infoYearBadge"
+          class="badge <%= selectedStudent && selectedStudent.year === '1st Year' ? 'bg-danger' : 'bg-info' %>">
+          <%= selectedStudent ? selectedStudent.year : '' %>
+        </span>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Student Name:</span>
+          <strong id="infoStudentName" class="text-black ">
+            <%= selectedStudent ? selectedStudent.name : '' %>
+          </strong>
+        </div>
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Roll Number:</span>
+          <span id="infoRollNumber" class="code-tag">
+            <%= selectedStudent ? selectedStudent.rollNumber : '' %>
+          </span>
+        </div>
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Reg. Number:</span>
+          <span id="infoRegNumber" class="text-black small font-monospace">
+            <%= selectedStudent ? selectedStudent.registrationNumber : '' %>
+          </span>
+        </div>
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Department:</span>
+          <span id="infoDepartment" class="text-secondary small">
+            <%= selectedStudent ? selectedStudent.department : 'CSE' %>
+          </span>
+        </div>
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Academic Year:</span>
+          <span id="infoYear" class="text-black  small fw-semibold">
+            <%= selectedStudent ? selectedStudent.year : '' %>
+          </span>
+        </div>
+        <div class="col-6 col-md-4">
+          <span class="text-secondary small d-block">Previous Contribution:</span>
+          <span id="infoPreviousContribution" class="text-success fw-bold">₹<%= selectedStudent ?
+              selectedStudent.totalContributed : 0 %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Contribution Form (Only available if student is not 1st year) -->
+    <form id="collectionForm"
+      class="cse-card p-4 <%= (selectedStudent && selectedStudent.year !== '1st Year') ? '' : 'd-none' %>">
+      <input type="hidden" id="selectedStudentId" value="<%= selectedStudent ? selectedStudent._id : '' %>">
+
+
+
+
+
+
+
+    </form>
+  </div>
+
+  <!-- Receipt Success Modal -->
+  <div class="modal fade" id="receiptSuccessModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark border-secondary shadow-lg">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title text-success"><i class="fa-solid fa-circle-check me-2"></i>Payment Recorded
+            Successfully!</h5>
+        </div>
+        <div class="modal-body text-light">
+          <div class="p-3 rounded bg-black border border-secondary mb-3 text-center">
+            <span class="text-secondary small d-block">Transaction Reference</span>
+            <h4 id="modalTxId" class="code-tag my-1 text-warning">TD26-XXXXXX</h4>
+            <h2 id="modalAmount" class="text-success fw-bold mt-2">₹0</h2>
+          </div>
+
+          <div class="row g-2 small">
+            <div class="col-6 text-secondary">Student Name:</div>
+            <div id="modalStudentName" class="col-6 text-white fw-bold"></div>
+
+            <div class="col-6 text-secondary">Roll Number:</div>
+            <div id="modalRollNumber" class="col-6 text-white font-monospace"></div>
+
+            <div class="col-6 text-secondary">Collected By:</div>
+            <div id="modalCollector" class="col-6 text-white"></div>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+            <i class="fa-solid fa-plus me-1"></i> Collect Another
+          </button>
+          <div class="d-flex gap-2">
+            <a href="#" id="modalReceiptLink" class="btn btn-info btn-sm fw-semibold">
+              <i class="fa-solid fa-eye me-1"></i> View Receipt
+            </a>
+            <a href="#" id="modalReceiptPdfLink" target="_blank" class="btn btn-primary btn-sm fw-semibold">
+              <i class="fa-solid fa-download me-1"></i> Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/collection.js"></script>
+
+  <%- include('../partials/footer') %>

@@ -1,0 +1,118 @@
+.invitation-card-container {
+  max-width: 600px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.invitation-card {
+  background: radial-gradient(circle at top left, #1e293b 0%, #090d16 100%);
+  border: 3px solid #eab308;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(234, 179, 8, 0.15);
+  position: relative;
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.invitation-card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px dashed rgba(234, 179, 8, 0.4);
+  border-radius: 0.75rem;
+  pointer-events: none;
+}
+
+.card-header-badge {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #38bdf8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.card-teacher-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #facc15;
+  margin-top: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.card-quote-box {
+  background: rgba(15, 23, 42, 0.8);
+  border-left: 3px solid #38bdf8;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+.card-event-details {
+  background: rgba(30, 58, 138, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-joke-box {
+  background: rgba(88, 28, 135, 0.25);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  color: #e9d5ff;
+}
+
+/* Theme variations */
+.invitation-card.theme-matrix-green {
+  border-color: #22c55e;
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.2);
+}
+.invitation-card.theme-matrix-green .card-teacher-name { color: #4ade80; }
+.invitation-card.theme-matrix-green .card-header-badge { color: #22c55e; }
+
+.invitation-card.theme-tech-purple {
+  border-color: #c084fc;
+  box-shadow: 0 0 25px rgba(192, 132, 252, 0.2);
+}
+.invitation-card.theme-tech-purple .card-teacher-name { color: #e879f9; }
+
+/* Print Mode */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invitation-card-container, .invitation-card-container * {
+    visibility: visible;
+  }
+  .invitation-card-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  .invitation-card {
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

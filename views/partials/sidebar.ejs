@@ -1,0 +1,104 @@
+<aside class="sidebar" id="sidebar">
+  <!-- Brand Header -->
+  <div class="brand-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+      <div class="bg-primary rounded-2 d-flex align-items-center justify-content-center"
+           style="width: 36px; height: 36px; flex-shrink: 0;">
+        <i class="fa-solid fa-code text-white" style="font-size: 1rem;"></i>
+      </div>
+      <div>
+        <div class="fw-bold text-white" style="font-size: 0.9rem; line-height: 1.2;">CSE EventLedger</div>
+        <div class="text-slate-400" style="font-size: 0.7rem; color: #94a3b8;">Teachers' Day 2026</div>
+      </div>
+    </div>
+    <!-- Close button for mobile -->
+    <button class="btn btn-sm d-lg-none text-white" id="sidebarClose" style="background:transparent; border:none; padding: 0.25rem 0.5rem;">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <ul class="sidebar-nav">
+    <!-- Main -->
+    <li class="nav-item">
+      <a href="/dashboard" class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="/contributions/collect" class="nav-link <%= currentPath === '/contributions/collect' ? 'active' : '' %>"
+         style="<%= currentPath !== '/contributions/collect' ? 'color: #fbbf24;' : '' %>">
+        <i class="fa-solid fa-hand-holding-dollar" style="color: #fbbf24;"></i>
+        <span class="fw-semibold">Status Check </span>
+      </a>
+    </li>
+
+    <div class="sidebar-nav-section-label">Directory</div>
+
+    <li class="nav-item">
+      <a href="/students" class="nav-link <%= currentPath.startsWith('/students') ? 'active' : '' %>">
+        <i class="fa-solid fa-user-graduate"></i>
+        <span>Student Directory</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="/invitations" class="nav-link <%= currentPath.startsWith('/invitations') ? 'active' : '' %>">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>Teacher Directory</span>
+      </a>
+    </li>
+
+    <div class="sidebar-nav-section-label">Finance</div>
+
+    <li class="nav-item">
+      <a href="/contributions" class="nav-link <%= currentPath === '/contributions' ? 'active' : '' %>">
+        <i class="fa-solid fa-receipt"></i>
+        <span>Collection Ledger</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="/expenses" class="nav-link <%= currentPath.startsWith('/expenses') ? 'active' : '' %>">
+        <i class="fa-solid fa-money-bill-transfer"></i>
+        <span>Expenses</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="/reports" class="nav-link <%= currentPath.startsWith('/reports') ? 'active' : '' %>">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <span>Reports & Exports</span>
+      </a>
+    </li>
+
+    <% if (currentUser && currentUser.role === 'superadmin') { %>
+      <div class="sidebar-nav-section-label">SuperAdmin</div>
+
+      <li class="nav-item">
+        <a href="/admins" class="nav-link <%= currentPath.startsWith('/admins') ? 'active' : '' %>">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Admin Management</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/audit" class="nav-link <%= currentPath.startsWith('/audit') ? 'active' : '' %>">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Audit Logs</span>
+        </a>
+      </li>
+    <% } %>
+
+    <li class="nav-item" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">
+      <a href="/auth/logout" class="nav-link" style="color: #f87171;">
+        <i class="fa-solid fa-arrow-right-from-bracket" style="color: #f87171;"></i>
+        <span>Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+<!-- Mobile overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>

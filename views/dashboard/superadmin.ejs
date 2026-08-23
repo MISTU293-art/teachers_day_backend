@@ -1,0 +1,167 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+  <div>
+    <h4 class="fw-bold text-black mb-1">SuperAdmin Financial Console</h4>
+    <p class="text-secondary small mb-0">Live real-time monitoring of Teachers' Day 2026 funds and operations</p>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <a href="/reports/export/pdf" class="btn btn-outline-info btn-sm">
+      <i class="fa-solid fa-file-pdf me-1"></i> PDF Report
+    </a>
+    <a href="/reports/export/excel" class="btn btn-outline-success btn-sm">
+      <i class="fa-solid fa-file-excel me-1"></i> Excel Export
+    </a>
+    <a href="/contributions/collect" class="btn btn-warning btn-sm fw-semibold">
+      <i class="fa-solid fa-plus me-1"></i> New Collection
+    </a>
+  </div>
+</div>
+
+<!-- Primary Financial Cards -->
+<div class="row g-3 mb-4">
+  <!-- Total Collection -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="cse-card stat-card blue p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Total Collected</span>
+          <h3 class="fw-bold text-black mb-0 mt-1">₹<%= stats.totalCollected.toLocaleString('en-IN') %></h3>
+          <span class="text-info small" style="font-size: 0.75rem;"><%= stats.totalTransactions %> verified transactions</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approved Expenses -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="cse-card stat-card red p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Approved Expenses</span>
+          <h3 class="fw-bold text-danger mb-0 mt-1">₹<%= stats.totalApprovedExpenses.toLocaleString('en-IN') %></h3>
+          <span class="text-secondary small" style="font-size: 0.75rem;"><%= stats.approvedExpensesCount %> approved bills</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-receipt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remaining Balance -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="cse-card stat-card green p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Remaining Balance</span>
+          <h3 class="fw-bold text-success mb-0 mt-1">₹<%= stats.remainingBalance.toLocaleString('en-IN') %></h3>
+          <span class="text-success small" style="font-size: 0.75rem;">Calculated directly from DB</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Review Expenses -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="cse-card stat-card yellow p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Pending Expenses</span>
+          <h3 class="fw-bold text-warning mb-0 mt-1">₹<%= stats.totalPendingExpenses.toLocaleString('en-IN') %></h3>
+          <span class="text-warning small" style="font-size: 0.75rem;"><%= stats.pendingExpensesCount %> awaiting approval</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Secondary Operational Metrics -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="cse-card p-3 d-flex align-items-center gap-3">
+      <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+        <i class="fa-solid fa-users fa-lg"></i>
+      </div>
+      <div>
+        <h5 class="fw-bold text-black mb-0"><%= stats.totalStudents %></h5>
+        <span class="text-black small" style="font-size: 0.75rem;">Total Students</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="cse-card p-3 d-flex align-items-center gap-3">
+      <div class="bg-success bg-opacity-10 text-success p-2 rounded-3">
+        <i class="fa-solid fa-user-check fa-lg"></i>
+      </div>
+      <div>
+        <h5 class="fw-bold text-black mb-0"><%= stats.paidStudents %></h5>
+        <span class="text-secondary small" style="font-size: 0.75rem;">Contributed</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="cse-card p-3 d-flex align-items-center gap-3">
+      <div class="bg-warning bg-opacity-10 text-warning p-2 rounded-3">
+        <i class="fa-solid fa-user-clock fa-lg"></i>
+      </div>
+      <div>
+        <h5 class="fw-bold text-black mb-0"><%= stats.pendingStudents %></h5>
+        <span class="text-secondary small" style="font-size: 0.75rem;">Pending (2nd-4th)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-3">
+    <div class="cse-card p-3 d-flex align-items-center gap-3">
+      <div class="bg-info bg-opacity-10 text-info p-2 rounded-3">
+        <i class="fa-solid fa-user-shield fa-lg"></i>
+      </div>
+      <div>
+        <h5 class="fw-bold text-black mb-0"><%= stats.totalAdmins %></h5>
+        <span class="text-secondary small" style="font-size: 0.75rem;">Active Admins</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-lg-7">
+    <div class="cse-card p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h6 class="fw-bold text-black mb-0"><i class="fa-solid fa-chart-column text-primary me-2"></i>Collection by Academic Year</h6>
+        <span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.7rem;">1st Year Excluded</span>
+      </div>
+      <div style="height: 250px;">
+        <canvas id="yearCollectionChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-5">
+    <div class="cse-card p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h6 class="fw-bold text-black mb-0"><i class="fa-solid fa-chart-pie text-info me-2"></i>Payment Distribution</h6>
+        <span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.7rem;">Cash vs UPI</span>
+      </div>
+      <div style="height: 250px;">
+        <canvas id="methodCollectionChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%- include('../partials/footer') %>

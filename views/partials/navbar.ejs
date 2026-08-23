@@ -1,0 +1,51 @@
+<nav class="top-navbar">
+  <div class="d-flex align-items-center gap-3">
+    <!-- Hamburger (mobile only) -->
+    <button class="btn btn-light btn-sm border-0 d-lg-none" id="sidebarToggle" type="button">
+      <i class="fa-solid fa-bars text-muted"></i>
+    </button>
+
+    <div class="d-none d-md-flex align-items-center gap-2">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">
+        <i class="fa-solid fa-calendar-days me-1"></i>Teachers' Day 2026
+      </span>
+      <span class="text-muted small">Dept. of Computer Science & Engineering</span>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center gap-2">
+    <a href="/contributions/collect" class="btn btn-warning btn-sm fw-semibold d-flex align-items-center gap-1">
+      <i class="fa-solid fa-bolt"></i>
+      <span class="d-none d-sm-inline">Quick Collect</span>
+    </a>
+
+    <% if (currentUser) { %>
+      <div class="dropdown">
+        <button class="btn btn-light btn-sm border dropdown-toggle d-flex align-items-center gap-2" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="avatar-circle avatar-primary" style="width: 28px; height: 28px; font-size: 0.78rem;">
+            <%= currentUser.name.charAt(0).toUpperCase() %>
+          </div>
+          <span class="small fw-semibold d-none d-sm-inline text-dark"><%= currentUser.name %></span>
+          <span class="badge <%= currentUser.role === 'superadmin' ? 'bg-danger' : 'bg-primary' %> ms-1"
+                style="font-size: 0.62rem; text-transform: uppercase;">
+            <%= currentUser.role === 'superadmin' ? 'SA' : 'Admin' %>
+          </span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm border">
+          <li>
+            <div class="px-3 py-2 border-bottom">
+              <div class="small fw-bold text-dark"><%= currentUser.name %></div>
+              <div class="text-muted" style="font-size: 0.75rem;"><%= currentUser.email %></div>
+            </div>
+          </li>
+          <li>
+            <a class="dropdown-item small py-2 text-danger" href="/auth/logout">
+              <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sign Out
+            </a>
+          </li>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+</nav>

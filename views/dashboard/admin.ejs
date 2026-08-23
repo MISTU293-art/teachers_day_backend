@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+  <div>
+    <h4 class="fw-bold text-black mb-1">Volunteer Collection Terminal</h4>
+    <p class="text-secondary small mb-0">Welcome, <strong><%= currentUser.name %></strong> • CSE Event Volunteer Portal</p>
+  </div>
+  <div>
+    <a href="/contributions/collect" class="btn btn-warning fw-bold shadow">
+      <i class="fa-solid fa-plus me-1"></i> Collect Student Money
+    </a>
+  </div>
+</div>
+
+<!-- Volunteer Stats Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card blue p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-black small fw-semibold text-uppercase">My Collections</span>
+          <h3 class="fw-bold text-black mb-0 mt-1">₹<%= stats.myCollectionsTotal.toLocaleString('en-IN') %></h3>
+          <span class="text-info small" style="font-size: 0.75rem;"><%= stats.myTransactionsCount %> payments collected by you</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card green p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Total Event Pool</span>
+          <h3 class="fw-bold text-success mb-0 mt-1">₹<%= stats.totalCollected.toLocaleString('en-IN') %></h3>
+          <span class="text-secondary small" style="font-size: 0.75rem;"><%= stats.totalTransactions %> total contributions</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-vault"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card yellow p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-semibold text-uppercase">Eligible Contributors</span>
+          <h3 class="fw-bold text-warning mb-0 mt-1"><%= stats.paidStudents %> / <%= stats.eligibleStudents %></h3>
+          <span class="text-secondary small" style="font-size: 0.75rem;">2nd, 3rd, 4th Year Students</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Collection CTA Banner -->
+<div class="cse-card p-4 mb-4 border-warning border-opacity-25" style="background: linear-gradient(90deg, #1e1b4b 0%, #172554 100%);">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-8">
+      <h5 class="fw-bold text-white mb-1"><i class="fa-solid fa-qrcode text-warning me-2"></i>Collect Student Contribution Now</h5>
+      <p class="text-light text-opacity-75 small mb-md-0">
+        Search any CSE student by name or roll number. First-year students are automatically blocked by the system.
+      </p>
+    </div>
+    <div class="col-12 col-md-4 text-md-end">
+      <a href="/contributions/collect" class="btn btn-warning btn-lg fw-bold shadow-sm">
+        <i class="fa-solid fa-arrow-right me-1"></i> Open Terminal
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<%- include('../partials/footer') %>

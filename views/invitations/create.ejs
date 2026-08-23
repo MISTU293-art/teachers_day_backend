@@ -1,0 +1,104 @@
+<%- include('../partials/header') %>
+
+<div class="page-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+  <div>
+    <a href="/invitations" class="btn btn-light btn-sm mb-2"><i class="fa-solid fa-arrow-left me-1"></i>Back to Directory</a>
+    <h4 class="page-title mb-1"><i class="fa-solid fa-wand-magic-sparkles me-2 text-warning"></i>Add Teacher Invitation</h4>
+    <p class="page-subtitle mb-0">Generate a personalized CSE-themed invitation card for a faculty member</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger py-2 small mb-4">
+            <i class="fa-solid fa-circle-exclamation me-2"></i><%= error %>
+          </div>
+        <% } %>
+
+        <form action="/invitations" method="POST">
+
+          <!-- Teacher Name + Designation -->
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-sm-7">
+              <label class="form-label fw-semibold">Teacher's Name <span class="text-danger">*</span></label>
+              <input type="text" name="teacherName" class="form-control" placeholder="e.g. Dr. Anindita Sen" required
+                value="<%= typeof formData !== 'undefined' ? (formData.teacherName || '') : '' %>">
+            </div>
+            <div class="col-12 col-sm-5">
+              <label class="form-label fw-semibold">Designation <span class="text-danger">*</span></label>
+              <input type="text" name="designation" class="form-control" placeholder="e.g. Professor & HOD" required
+                value="<%= typeof formData !== 'undefined' ? (formData.designation || '') : '' %>">
+            </div>
+          </div>
+
+          <!-- Department -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Department</label>
+            <input type="text" name="department" class="form-control"
+              value="<%= typeof formData !== 'undefined' ? (formData.department || 'Department of Computer Science & Engineering') : 'Department of Computer Science & Engineering' %>">
+          </div>
+
+          <!-- Heartfelt Message -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Heartfelt Message</label>
+            <textarea name="message" rows="3" class="form-control"><%= typeof formData !== 'undefined' && formData.message ? formData.message : "Your guidance has helped us turn code into confidence, bugs into lessons, and students into engineers. We warmly invite you to join us in celebrating Teachers' Day." %></textarea>
+          </div>
+
+          <!-- CSE Joke -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">CSE Joke / Quote</label>
+            <select class="form-select mb-2" onchange="document.getElementById('jokeInput').value = this.value">
+              <option value="">— Choose a preset joke —</option>
+              <% cseJokes.forEach((j, i) => { %>
+                <option value="<%= j %>"><%= j.length > 65 ? j.substring(0,65)+'...' : j %></option>
+              <% }) %>
+            </select>
+            <textarea id="jokeInput" name="joke" rows="2" class="form-control" placeholder="Or type your own custom joke/quote..."><%= typeof formData !== 'undefined' && formData.joke ? formData.joke : cseJokes[0] %></textarea>
+          </div>
+
+          <!-- Event Details Row -->
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-sm-4">
+              <label class="form-label fw-semibold">Event Date</label>
+              <input type="text" name="eventDate" class="form-control" value="5th September 2026">
+            </div>
+            <div class="col-12 col-sm-4">
+              <label class="form-label fw-semibold">Event Time</label>
+              <input type="text" name="eventTime" class="form-control" value="11:00 AM - 04:00 PM">
+            </div>
+            <div class="col-12 col-sm-4">
+              <label class="form-label fw-semibold">Card Theme</label>
+              <select name="theme" class="form-select">
+                <option value="cyber-gold">🌟 Cyber Gold</option>
+                <option value="matrix-green">💚 Matrix Green</option>
+                <option value="tech-purple">💜 Tech Purple</option>
+                <option value="classic-navy">🔵 Classic Navy</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Venue -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Venue</label>
+            <input type="text" name="venue" class="form-control" value="CSE Department Seminar Hall (Auditorium 302)">
+          </div>
+
+          <!-- Submit -->
+          <div class="d-flex gap-2">
+            <a href="/invitations" class="btn btn-light flex-grow-1">Cancel</a>
+            <button type="submit" class="btn btn-warning flex-grow-1 fw-semibold">
+              <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Generate Invitation
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

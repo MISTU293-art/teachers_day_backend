@@ -1,0 +1,221 @@
+<%- include('../partials/header') %>
+
+<div class="page-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+  <div>
+    <h4 class="page-title mb-1"><i class="fa-solid fa-user-graduate me-2 text-primary"></i>Student Directory</h4>
+    <p class="page-subtitle mb-0">All enrolled students, academic years, and contribution statuses</p>
+  </div>
+  <a href="/students/create" class="btn btn-primary btn-sm fw-semibold">
+    <i class="fa-solid fa-user-plus me-1"></i> Add Student
+  </a>
+</div>
+
+<!-- Flash message -->
+<% if (typeof query !== 'undefined' && query.msg) { %>
+  <div class="alert alert-success alert-dismissible fade show py-2 small mb-3" role="alert">
+    <i class="fa-solid fa-circle-check me-2"></i><%= query.msg %>
+    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<!-- Search & Filters -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body py-3">
+    <form action="/students" method="GET" class="row g-2 align-items-end">
+      <div class="col-12 col-md-4">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Search</label>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+          <input type="text" name="search" class="form-control" placeholder="Name, roll, reg..." value="<%= query.search || '' %>">
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Year</label>
+        <select name="year" class="form-select form-select-sm">
+          <option value="">All Years</option>
+          <% years.forEach(y => { %>
+            <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>><%= y %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Status</label>
+        <select name="status" class="form-select form-select-sm">
+          <option value="">All Statuses</option>
+          <% statuses.forEach(s => { %>
+            <option value="<%= s %>" <%= query.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+          <i class="fa-solid fa-filter me-1"></i>Filter
+        </button>
+        <% if (query.search || query.year || query.status) { %>
+          <a href="/students" class="btn btn-outline-secondary btn-sm" title="Clear">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Students Cards (Mobile) / Table (Desktop) -->
+
+<!-- Mobile Card View -->
+<div class="d-md-none">
+  <% if (students && students.length > 0) { %>
+    <% students.forEach(s => { %>
+      <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="avatar-circle avatar-<%= s.year === '1st Year' ? 'danger' : 'primary' %>">
+              <%= s.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <a href="/students/<%= s._id %>" class="fw-bold text-dark text-decoration-none d-block text-truncate"><%= s.name %></a>
+              <span class="code-tag"><%= s.rollNumber %></span>
+            </div>
+            <div>
+              <% if (s.year === '1st Year') { %>
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="fa-solid fa-ban me-1"></i>Not Eligible</span>
+              <% } else if (s.contributionStatus === 'Paid') { %>
+                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-solid fa-check me-1"></i>Paid</span>
+              <% } else { %>
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="fa-solid fa-clock me-1"></i>Pending</span>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="row g-2 text-sm mb-3">
+            <div class="col-6">
+              <div class="text-muted small">Year</div>
+              <div class="fw-semibold small"><%= s.year %> &bull; Sec <%= s.section %></div>
+            </div>
+            <div class="col-6">
+              <div class="text-muted small">Amount Paid</div>
+              <div class="fw-bold <%= s.totalContributed > 0 ? 'text-success' : 'text-muted' %>">
+                ₹<%= (s.totalContributed || 0).toLocaleString('en-IN') %>
+              </div>
+            </div>
+            <% if (s.totalContributed > 0 && s.lastCollectedByName) { %>
+            <div class="col-12">
+              <div class="text-muted small">Collected by</div>
+              <div class="small fw-semibold text-primary"><i class="fa-solid fa-user-shield me-1"></i><%= s.lastCollectedByName %></div>
+            </div>
+            <% } %>
+          </div>
+
+          <div class="d-flex gap-2">
+            <% if (s.year !== '1st Year') { %>
+              <a href="/contributions/collect?studentId=<%= s._id %>" class="btn btn-warning btn-sm flex-grow-1 fw-semibold">
+                <i class="fa-solid fa-hand-holding-dollar me-1"></i>Collect
+              </a>
+            <% } %>
+            <a href="/students/<%= s._id %>" class="btn btn-outline-secondary btn-sm">
+              <i class="fa-solid fa-eye"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+        <i class="fa-solid fa-users-slash fa-2x text-muted mb-3"></i>
+        <p class="text-muted mb-2">No students found.</p>
+        <a href="/students/create" class="btn btn-primary btn-sm">Add First Student</a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<!-- Desktop Table View -->
+<div class="card border-0 shadow-sm d-none d-md-block">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light border-bottom">
+        <tr>
+          <th class="fw-semibold text-muted small text-uppercase ps-4">Student</th>
+          <th class="fw-semibold text-muted small text-uppercase">Year / Sec</th>
+          <th class="fw-semibold text-muted small text-uppercase">Status</th>
+          <th class="fw-semibold text-muted small text-uppercase">Amount</th>
+          <th class="fw-semibold text-muted small text-uppercase">Collected By</th>
+          <th class="fw-semibold text-muted small text-uppercase pe-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (students && students.length > 0) { %>
+          <% students.forEach(s => { %>
+            <tr>
+              <td class="ps-4">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="avatar-circle avatar-<%= s.year === '1st Year' ? 'danger' : 'primary' %>">
+                    <%= s.name.charAt(0).toUpperCase() %>
+                  </div>
+                  <div>
+                    <a href="/students/<%= s._id %>" class="fw-semibold text-dark text-decoration-none"><%= s.name %></a>
+                    <div><span class="code-tag"><%= s.rollNumber %></span></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-normal">
+                  <%= s.year %>
+                </span>
+                <div class="text-muted small mt-1">Section <%= s.section %></div>
+              </td>
+              <td>
+                <% if (s.year === '1st Year') { %>
+                  <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"><i class="fa-solid fa-ban me-1"></i>Not Eligible</span>
+                <% } else if (s.contributionStatus === 'Paid') { %>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-solid fa-check me-1"></i>Paid</span>
+                <% } else if (s.contributionStatus === 'Partially Paid') { %>
+                  <span class="badge bg-info-subtle text-info border border-info-subtle"><i class="fa-solid fa-circle-half-stroke me-1"></i>Partial</span>
+                <% } else { %>
+                  <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="fa-solid fa-clock me-1"></i>Pending</span>
+                <% } %>
+              </td>
+              <td class="fw-bold <%= s.totalContributed > 0 ? 'text-success' : 'text-muted' %>">
+                ₹<%= (s.totalContributed || 0).toLocaleString('en-IN') %>
+              </td>
+              <td>
+                <% if (s.totalContributed > 0 && s.lastCollectedByName) { %>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-circle avatar-sm avatar-success"><%= s.lastCollectedByName.charAt(0).toUpperCase() %></div>
+                    <span class="small fw-semibold text-success"><%= s.lastCollectedByName %></span>
+                  </div>
+                <% } else { %>
+                  <span class="text-muted small">—</span>
+                <% } %>
+              </td>
+              <td class="pe-4">
+                <div class="d-flex align-items-center gap-1">
+                  <% if (s.year !== '1st Year') { %>
+                    <a href="/contributions/collect?studentId=<%= s._id %>" class="btn btn-warning btn-sm fw-semibold" title="Collect Contribution">
+                      <i class="fa-solid fa-hand-holding-dollar me-1"></i>Collect
+                    </a>
+                  <% } %>
+                  <a href="/students/<%= s._id %>" class="btn btn-outline-secondary btn-sm" title="View Profile">
+                    <i class="fa-solid fa-eye"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="text-center text-muted py-5">
+              <i class="fa-solid fa-users-slash fa-2x mb-3 d-block opacity-50"></i>
+              No students found matching your criteria.
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/pagination') %>
+<%- include('../partials/footer') %>

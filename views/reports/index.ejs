@@ -1,0 +1,154 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+  <div>
+    <h4 class="fw-bold text-black mb-1"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Financial Reports & Exports</h4>
+    <p class="text-secondary small mb-0">Generate auditable PDF statements, Excel workbooks, and CSV sheets</p>
+  </div>
+</div>
+
+<!-- Balance Metrics -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card blue p-3 h-100">
+      <span class="text-secondary small fw-semibold text-uppercase">Total Collections</span>
+      <h3 class="fw-bold text-black mb-0 mt-1">₹<%= totalCollected.toLocaleString('en-IN') %></h3>
+      <span class="text-info small" style="font-size: 0.75rem;">All verified contributions</span>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card red p-3 h-100">
+      <span class="text-secondary small fw-semibold text-uppercase">Approved Expenditures</span>
+      <h3 class="fw-bold text-danger mb-0 mt-1">₹<%= totalExpenses.toLocaleString('en-IN') %></h3>
+      <span class="text-secondary small" style="font-size: 0.75rem;">Official expenses approved</span>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="cse-card stat-card green p-3 h-100">
+      <span class="text-secondary small fw-semibold text-uppercase">Remaining Event Balance</span>
+      <h3 class="fw-bold text-success mb-0 mt-1">₹<%= balance.toLocaleString('en-IN') %></h3>
+      <span class="text-success small" style="font-size: 0.75rem;">Real-time calculated pool</span>
+    </div>
+  </div>
+</div>
+
+<!-- Export Hub Cards -->
+<div class="row g-4 mb-4">
+  <!-- Card 1: Official PDF Report -->
+  <div class="col-12 col-md-6 col-xl-3">
+    <div class="cse-card p-4 h-100 d-flex flex-column justify-content-between">
+      <div>
+        <div class="d-inline-flex p-3 rounded-3 bg-danger bg-opacity-10 text-danger mb-3">
+          <i class="fa-solid fa-file-pdf fa-2x"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-1">Financial PDF Report</h5>
+        <p class="text-secondary small mb-3">
+          Official printable statement with CSE Department branding, summary financial boxes, and transaction tables.
+        </p>
+      </div>
+      <a href="/reports/export/pdf" target="_blank" class="btn btn-danger w-100 fw-semibold">
+        <i class="fa-solid fa-download me-1"></i> Generate PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- Card 2: Contributions Excel Workbook -->
+  <div class="col-12 col-md-6 col-xl-3">
+    <div class="cse-card p-4 h-100 d-flex flex-column justify-content-between">
+      <div>
+        <div class="d-inline-flex p-3 rounded-3 bg-success bg-opacity-10 text-success mb-3">
+          <i class="fa-solid fa-file-excel fa-2x"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-1">Collections Excel (.xlsx)</h5>
+        <p class="text-secondary small mb-3">
+          Formatted spreadsheet with custom column widths, formula totals, and transaction reference codes.
+        </p>
+      </div>
+      <a href="/reports/export/excel" class="btn btn-success w-100 fw-semibold">
+        <i class="fa-solid fa-download me-1"></i> Download .XLSX
+      </a>
+    </div>
+  </div>
+
+  <!-- Card 3: Contributions CSV -->
+  <div class="col-12 col-md-6 col-xl-3">
+    <div class="cse-card p-4 h-100 d-flex flex-column justify-content-between">
+      <div>
+        <div class="d-inline-flex p-3 rounded-3 bg-secondary bg-opacity-10 text-secondary mb-3">
+          <i class="fa-solid fa-file-csv fa-2x"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-1">Collections CSV</h5>
+        <p class="text-secondary small mb-3">
+          Standard UTF-8 CSV with Byte Order Mark (BOM) compatible with Excel, Google Sheets, and data tools.
+        </p>
+      </div>
+      <a href="/reports/export/csv" class="btn btn-outline-secondary w-100 fw-semibold">
+        <i class="fa-solid fa-download me-1"></i> Export .CSV
+      </a>
+    </div>
+  </div>
+
+  <!-- Card 4: Expenses Excel -->
+  <div class="col-12 col-md-6 col-xl-3">
+    <div class="cse-card p-4 h-100 d-flex flex-column justify-content-between">
+      <div>
+        <div class="d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning mb-3">
+          <i class="fa-solid fa-money-bill-transfer fa-2x"></i>
+        </div>
+        <h5 class="fw-bold text-white mb-1">Expenses Excel (.xlsx)</h5>
+        <p class="text-secondary small mb-3">
+          Full expenditure ledger categorized by Stage, Food, Gifts, Mementos, and approval statuses.
+        </p>
+      </div>
+      <a href="/reports/export/expenses/excel" class="btn btn-warning w-100 fw-semibold">
+        <i class="fa-solid fa-download me-1"></i> Export Expenses
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Filtered Export Form -->
+<div class="cse-card p-4">
+  <h6 class="fw-bold text-black mb-3"><i class="fa-solid fa-sliders text-info me-2"></i>Generate Filtered Collections Export</h6>
+  <form action="/reports/export/excel" method="GET" class="row g-3">
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-secondary">Academic Year</label>
+      <select name="year" class="form-select cse-input">
+        <option value="">All Academic Years</option>
+        <% years.forEach(y => { %>
+          <option value="<%= y %>"><%= y %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-secondary">Payment Method</label>
+      <select name="paymentMethod" class="form-select cse-input">
+        <option value="">All Methods</option>
+        <% paymentMethods.forEach(pm => { %>
+          <option value="<%= pm %>"><%= pm %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-secondary">Collected By</label>
+      <select name="adminId" class="form-select cse-input">
+        <option value="">All Administrators</option>
+        <% admins.forEach(a => { %>
+          <option value="<%= a._id %>"><%= a.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100 fw-semibold">
+        <i class="fa-solid fa-file-excel me-1"></i> Download Filtered Excel
+      </button>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>
