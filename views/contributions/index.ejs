@@ -1,137 +1,155 @@
 <%- include('../partials/header') %>
 
-<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
-  <div>
-    <h4 class="fw-bold text-black mb-1">Contributions Ledger</h4>
-    <p class="text-secondary small mb-0">Traceable database records of all student collections</p>
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <div>
+      <h4 class="fw-bold text-black mb-1">Contributions Ledger</h4>
+      <p class="text-secondary small mb-0">Traceable database records of all student collections</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <a href="/reports/export/excel" class="btn btn-outline-success btn-sm">
+        <i class="fa-solid fa-file-excel me-1"></i> Export Excel
+      </a>
+      <a href="/reports/export/csv" class="btn btn-outline-secondary btn-sm">
+        <i class="fa-solid fa-file-csv me-1"></i> Export CSV
+      </a>
+      <a href="/contributions/collect" class="btn btn-warning btn-sm fw-semibold">
+        <i class="fa-solid fa-plus me-1"></i> New Collection
+      </a>
+    </div>
   </div>
-  <div class="d-flex align-items-center gap-2">
-    <a href="/reports/export/excel" class="btn btn-outline-success btn-sm">
-      <i class="fa-solid fa-file-excel me-1"></i> Export Excel
-    </a>
-    <a href="/reports/export/csv" class="btn btn-outline-secondary btn-sm">
-      <i class="fa-solid fa-file-csv me-1"></i> Export CSV
-    </a>
-    <a href="/contributions/collect" class="btn btn-warning btn-sm fw-semibold">
-      <i class="fa-solid fa-plus me-1"></i> New Collection
-    </a>
-  </div>
-</div>
 
-<!-- Filter Bar -->
-<div class="cse-card p-3 mb-4">
-  <form action="/contributions" method="GET" class="row g-2 align-items-center">
-    <div class="col-12 col-md-3">
-      <div class="input-group input-group-sm">
-        <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-search"></i></span>
-        <input type="text" name="search" class="form-control cse-input" placeholder="Student name or roll number..." value="<%= query.search || '' %>">
+  <!-- Filter Bar -->
+  <div class="cse-card p-3 mb-4">
+    <form action="/contributions" method="GET" class="row g-2 align-items-center">
+      <div class="col-12 col-md-3">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-dark border-secondary text-secondary"><i
+              class="fa-solid fa-search"></i></span>
+          <input type="text" name="search" class="form-control cse-input" placeholder="Student name or roll number..."
+            value="<%= query.search || '' %>">
+        </div>
       </div>
-    </div>
 
-    <div class="col-6 col-md-2">
-      <select name="paymentMethod" class="form-select form-select-sm cse-input">
-        <option value="">All Payment Methods</option>
-        <% paymentMethods.forEach(pm => { %>
-          <option value="<%= pm %>" <%= query.paymentMethod === pm ? 'selected' : '' %>><%= pm %></option>
-        <% }) %>
-      </select>
-    </div>
+      <div class="col-6 col-md-2">
+        <select name="paymentMethod" class="form-select form-select-sm cse-input">
+          <option value="">All Payment Methods</option>
+          <% paymentMethods.forEach(pm=> { %>
+            <option value="<%= pm %>" <%=query.paymentMethod===pm ? 'selected' : '' %>><%= pm %>
+            </option>
+            <% }) %>
+        </select>
+      </div>
 
-    <div class="col-6 col-md-2">
-      <select name="year" class="form-select form-select-sm cse-input">
-        <option value="">All Years</option>
-        <% years.forEach(y => { %>
-          <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>><%= y %></option>
-        <% }) %>
-      </select>
-    </div>
+      <div class="col-6 col-md-2">
+        <select name="year" class="form-select form-select-sm cse-input">
+          <option value="">All Years</option>
+          <% years.forEach(y=> { %>
+            <option value="<%= y %>" <%=query.year===y ? 'selected' : '' %>><%= y %>
+            </option>
+            <% }) %>
+        </select>
+      </div>
 
-    <div class="col-6 col-md-2">
-      <input type="date" name="fromDate" class="form-control form-control-sm cse-input" value="<%= query.fromDate || '' %>" title="From Date">
-    </div>
+      <div class="col-6 col-md-2">
+        <input type="date" name="fromDate" class="form-control form-control-sm cse-input"
+          value="<%= query.fromDate || '' %>" title="From Date">
+      </div>
 
-    <div class="col-6 col-md-2">
-      <input type="date" name="toDate" class="form-control form-control-sm cse-input" value="<%= query.toDate || '' %>" title="To Date">
-    </div>
+      <div class="col-6 col-md-2">
+        <input type="date" name="toDate" class="form-control form-control-sm cse-input"
+          value="<%= query.toDate || '' %>" title="To Date">
+      </div>
 
-    <div class="col-12 col-md-1 d-flex gap-1">
-      <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
-        <i class="fa-solid fa-filter"></i>
-      </button>
-      <% if (query.search || query.paymentMethod || query.year || query.fromDate || query.toDate) { %>
-        <a href="/contributions" class="btn btn-outline-secondary btn-sm" title="Clear Filters">
-          <i class="fa-solid fa-xmark"></i>
-        </a>
-      <% } %>
-    </div>
-  </form>
-</div>
-
-<!-- Ledger Table -->
-<div class="cse-table-wrapper">
-  <div class="table-responsive">
-    <table class="cse-table">
-      <thead>
-        <tr>
-          <th>Tx ID</th>
-          <th>Student Name</th>
-          <th>Roll Number</th>
-          <th>Year</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Collected By</th>
-          <th>Date & Time</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (contributions && contributions.length > 0) { %>
-          <% contributions.forEach(c => { %>
-            <tr>
-              <td><span class="code-tag"><%= c.transactionReference %></span></td>
-              <td>
-                <span class="fw-semibold text-black"><%= c.student ? c.student.name : 'Unknown' %></span>
-              </td>
-              <td><span class="code-tag"><%= c.student ? c.student.rollNumber : 'N/A' %></span></td>
-              <td>
-                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25">
-                  <%= c.student ? c.student.year : 'N/A' %>
-                </span>
-              </td>
-              <td class="text-success fw-bold">₹<%= c.amount.toLocaleString('en-IN') %></td>
-              <td>
-                <span class="badge bg-dark border border-secondary text-secondary">
-                  <%= c.paymentMethod %>
-                </span>
-              </td>
-              <td class="text-secondary small">
-                <i class="fa-solid fa-user-check text-info me-1"></i><%= c.collectedByName %>
-              </td>
-              <td class="text-secondary small font-monospace">
-                <%= new Date(c.collectedAt).toLocaleString('en-IN') %>
-              </td>
-              <td>
-                <div class="d-flex gap-1">
-                  <a href="/contributions/<%= c._id %>/receipt" class="btn btn-outline-info btn-sm py-0 px-2" style="font-size: 0.75rem;" title="View Receipt">
-                    <i class="fa-solid fa-file-invoice"></i>
-                  </a>
-                  <a href="/contributions/<%= c._id %>/receipt/pdf" target="_blank" class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size: 0.75rem;" title="Download PDF Receipt">
-                    <i class="fa-solid fa-download"></i>
-                  </a>
-                </div>
-              </td>
-            </tr>
-          <% }) %>
-        <% } else { %>
-          <tr>
-            <td colspan="9" class="text-center text-secondary py-4">No contributions found in this query.</td>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
+      <div class="col-12 col-md-1 d-flex gap-1">
+        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <% if (query.search || query.paymentMethod || query.year || query.fromDate || query.toDate) { %>
+          <a href="/contributions" class="btn btn-outline-secondary btn-sm" title="Clear Filters">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+          <% } %>
+      </div>
+    </form>
   </div>
-</div>
 
-<%- include('../partials/pagination') %>
+  <!-- Ledger Table -->
+  <div class="cse-table-wrapper">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tx ID</th>
+            <th>Student Name</th>
+            <th>Roll Number</th>
+            <th>Year</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Collected By</th>
+            <th>Date & Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
 
-<%- include('../partials/footer') %>
+          <% if (contributions && contributions.length> 0) { %>
+            <% contributions.forEach(c=> { %>
+              <tr>
+                <td><span class="code-tag">
+                    <%= c.transactionReference %>
+                  </span></td>
+                <td>
+                  <span class="fw-semibold text-black">
+                    <%= c.student ? c.student.name : 'Unknown' %>
+                  </span>
+                </td>
+                <td><span class="code-tag">
+                    <%= c.student ? c.student.rollNumber : 'N/A' %>
+                  </span></td>
+                <td>
+                  <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25">
+                    <%= c.student ? c.student.year : 'N/A' %>
+                  </span>
+                </td>
+                <td class="text-success fw-bold">₹<%= c.amount.toLocaleString('en-IN') %>
+                </td>
+                <td>
+                  <span class="badge bg-dark border border-secondary text-secondary">
+                    <%= c.paymentMethod %>
+                  </span>
+                </td>
+                <td class="text-secondary small">
+                  <i class="fa-solid fa-user-check text-info me-1"></i>
+                  <%= c.collectedByName %>
+                </td>
+                <td class="text-secondary small font-monospace">
+                  <%= new Date(c.collectedAt).toLocaleString('en-IN') %>
+                </td>
+                <td>
+                  <div class="d-flex gap-1">
+                    <a href="/contributions/<%= c._id %>/receipt" class="btn btn-outline-info btn-sm py-0 px-2"
+                      style="font-size: 0.75rem;" title="View Receipt">
+                      <i class="fa-solid fa-file-invoice"></i>
+                    </a>
+                    <a href="/contributions/<%= c._id %>/receipt/pdf" target="_blank"
+                      class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size: 0.75rem;"
+                      title="Download PDF Receipt">
+                      <i class="fa-solid fa-download"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="9" class="text-center text-secondary py-4">No contributions found in this query.</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%- include('../partials/pagination') %>
+
+    <%- include('../partials/footer') %>

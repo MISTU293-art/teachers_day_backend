@@ -107,7 +107,7 @@
 <!-- Expenses Table -->
 <div class="cse-table-wrapper">
   <div class="table-responsive">
-    <table class="cse-table">
+    <table class="table">
       <thead>
         <tr>
           <th>Expense Title</th>
@@ -135,7 +135,7 @@
               </td>
               <td><span class="badge bg-secondary bg-opacity-50"><%= exp.category %></span></td>
               <td class="text-danger fw-bold">₹<%= exp.amount.toLocaleString('en-IN') %></td>
-              <td class="text-light small"><%= exp.paidTo %></td>
+              <td class="text-black small"><%= exp.paidTo %></td>
               <td><span class="badge bg-dark border border-secondary text-secondary"><%= exp.paymentMethod %></span></td>
               <td class="text-secondary small"><%= exp.addedBy ? exp.addedBy.name : 'System' %></td>
               <td>
@@ -149,7 +149,7 @@
               <% if (currentUser && currentUser.role === 'superadmin') { %>
                 <td>
                   <% if (exp.status === 'pending') { %>
-                    <div class="d-flex gap-1">
+                    <div class="d-flex gap-1 visible">
                       <form action="/expenses/<%= exp._id %>/approve" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-success btn-sm py-0 px-2" style="font-size: 0.75rem;" title="Approve Expense">
                           <i class="fa-solid fa-check"></i>

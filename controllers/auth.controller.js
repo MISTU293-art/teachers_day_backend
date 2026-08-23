@@ -8,9 +8,7 @@ const env = require('../config/env.config');
  * Render Login Page
  */
 const renderLogin = (req, res) => {
-  if (req.user) {
-    return res.redirect('/dashboard');
-  }
+  
   const redirect = req.query.redirect || '/dashboard';
   const error = req.query.error || null;
   res.render('auth/login', {

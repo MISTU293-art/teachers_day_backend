@@ -1,9 +1,9 @@
 <% if (typeof pagination !== 'undefined' && pagination.totalPages > 1) { %>
   <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mt-4 pt-3 border-top border-secondary border-opacity-25">
     <div class="text-secondary small">
-      Showing <span class="text-light fw-semibold"><%= ((pagination.currentPage - 1) * pagination.limit) + 1 %></span>
-      to <span class="text-light fw-semibold"><%= Math.min(pagination.currentPage * pagination.limit, pagination.totalRecords) %></span>
-      of <span class="text-light fw-semibold"><%= pagination.totalRecords %></span> records
+      Showing <span class="text-black fw-semibold"><%= ((pagination.currentPage - 1) * pagination.limit) + 1 %></span>
+      to <span class="text-black fw-semibold"><%= Math.min(pagination.currentPage * pagination.limit, pagination.totalRecords) %></span>
+      of <span class="text-black fw-semibold"><%= pagination.totalRecords %></span> records
     </div>
 
     <nav aria-label="Table navigation">
