@@ -56,6 +56,7 @@ module.exports = {
     REPORTS: 'REPORTS',
     GALLERY: 'GALLERY',
     PARTICIPATIONS: 'PARTICIPATIONS',
+    PROGRAMS: 'PROGRAMS',
     SYSTEM: 'SYSTEM'
   },
 
@@ -85,7 +86,37 @@ module.exports = {
     EXPORT_REPORT: 'EXPORT_REPORT',
     UPLOAD_IMAGE: 'UPLOAD_IMAGE',
     DELETE_IMAGE: 'DELETE_IMAGE',
-    REVIEW_PARTICIPATION: 'REVIEW_PARTICIPATION'
+    REVIEW_PARTICIPATION: 'REVIEW_PARTICIPATION',
+    CREATE_PROGRAM: 'CREATE_PROGRAM',
+    UPDATE_PROGRAM: 'UPDATE_PROGRAM',
+    DELETE_PROGRAM: 'DELETE_PROGRAM'
+  },
+
+  PROGRAM_CATEGORIES: [
+    'Celebration',
+    'Hackathon',
+    'Workshop',
+    'Technical Fest',
+    'Cultural',
+    'Seminar & Keynote',
+    'Orientation & Freshers',
+    'Farewell',
+    'Coding Contest',
+    'Other'
+  ],
+
+  PROGRAM_STATUS: {
+    UPCOMING: 'Upcoming',
+    ONGOING: 'Ongoing',
+    COMPLETED: 'Completed',
+    POSTPONED: 'Postponed'
+  },
+
+  REGISTRATION_STATUS: {
+    OPEN: 'Open',
+    CLOSED: 'Closed',
+    COMING_SOON: 'Coming Soon',
+    NOT_REQUIRED: 'Not Required'
   },
 
   PERFORMANCE_TYPES: [

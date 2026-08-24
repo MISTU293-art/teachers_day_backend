@@ -34,7 +34,14 @@
       </a>
     </li>
 
-    <div class="sidebar-nav-section-label">Event & Directory</div>
+    <div class="sidebar-nav-section-label">Event & Programs</div>
+
+    <li class="nav-item">
+      <a href="/programs" class="nav-link <%= currentPath.startsWith('/programs') ? 'active' : '' %>">
+        <i class="fa-solid fa-calendar-check text-primary"></i>
+        <span>Programs & Events</span>
+      </a>
+    </li>
 
     <li class="nav-item">
       <a href="/students" class="nav-link <%= currentPath.startsWith('/students') ? 'active' : '' %>">

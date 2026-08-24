@@ -21,6 +21,7 @@ const reportRoutes = require('./routes/report.routes');
 const auditRoutes = require('./routes/audit.routes');
 const galleryRoutes = require('./routes/gallery.routes');
 const participationRoutes = require('./routes/participation.routes');
+const programRoutes = require('./routes/program.routes');
 const apiRoutes = require('./routes/api.routes');
 
 const app = express();
@@ -99,6 +100,7 @@ app.use('/students', studentRoutes);
 app.use('/contributions', contributionRoutes);
 app.use('/expenses', expenseRoutes);
 app.use('/invitations', invitationRoutes);
+app.use('/programs', programRoutes);
 app.use('/gallery', galleryRoutes);
 app.use('/participations', participationRoutes);
 app.use('/admins', adminRoutes);

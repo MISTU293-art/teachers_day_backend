@@ -18,14 +18,14 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-mono font-bold text-xs">
                 CSE
               </div>
-              <span className="font-mono font-bold text-white text-base">Teachers' Day 2026</span>
+              <span className="font-mono font-bold text-white text-base">Teachers' Day  2026</span>
             </div>
             <p className="text-slate-400 text-xs max-w-sm mb-4 leading-relaxed">
               Organized by the Department of Computer Science & Engineering students to express heartfelt gratitude to our mentors, professors, and guides on 3rd September 2026.
             </p>
             <div className="flex items-center gap-2 text-slate-500 font-mono text-[11px]">
               <Terminal className="w-3.5 h-3.5 text-blue-400" />
-              <span>Event Portal & Ledger Active</span>
+              <span>Event Portal </span>
             </div>
           </div>
 
@@ -46,11 +46,11 @@ export default function Footer() {
             <h4 className="font-mono text-white text-xs font-bold uppercase tracking-wider mb-3">Organizers</h4>
             <ul className="space-y-2 mb-4">
               <li><span className="text-slate-300 font-medium">CSE Event Committee 2026</span></li>
-              <li><span>Auditorium Hall 302</span></li>
+              <li><span>To Be Announced</span></li>
               <li><span>Event Date: 3rd September 2026</span></li>
             </ul>
             <a
-              href="http://localhost:3000/auth/login"
+              href="https://teachers-day-backend.onrender.com/auth/login"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all text-[11px] font-mono"

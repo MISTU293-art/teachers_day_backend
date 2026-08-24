@@ -1,31 +1,31 @@
 import React from 'react';
-import { Cpu, Bug, Lightbulb, Compass, Award, Quote } from 'lucide-react';
+import { Cpu, Bug, Lightbulb, Compass, Award, Quote, Code2, Users, Rocket } from 'lucide-react';
 
 export default function About() {
   const pillars = [
     {
       icon: Cpu,
-      title: 'Architects of Logic',
-      desc: 'Teaching us how to break down monumental real-world challenges into elegant, structured algorithms.',
+      title: 'Technical Excellence',
+      desc: 'Fostering cutting-edge engineering skills across algorithms, cloud architectures, AI, and distributed systems.',
       color: 'from-blue-500 to-cyan-500'
     },
     {
-      icon: Bug,
-      title: 'Debugging Our Doubts',
-      desc: 'Patiently sitting with us through stack traces, syntax errors, and conceptual hurdles until light dawned.',
-      color: 'from-rose-500 to-pink-500'
-    },
-    {
       icon: Lightbulb,
-      title: 'Fueling Innovation',
-      desc: 'Pushing our boundaries into AI, Cloud, Distributed Systems, and emerging technologies beyond textbooks.',
+      title: 'Hackathons & Innovation',
+      desc: 'Encouraging students to build impactful software solutions through department coding sprints and technical challenges.',
       color: 'from-amber-500 to-yellow-500'
     },
     {
-      icon: Compass,
-      title: 'Life Mentorship',
-      desc: 'Guiding our career paths, ethical principles, and personal growth with unending wisdom and care.',
+      icon: Users,
+      title: 'Department Celebrations',
+      desc: 'Uniting students and faculty through Teachers\' Day galas, Freshers\' inductions, farewells, and cultural festivals.',
       color: 'from-purple-500 to-indigo-500'
+    },
+    {
+      icon: Rocket,
+      title: 'Mentorship & Guidance',
+      desc: 'Deep mentorship from experienced professors nurturing students from their first line of code to industry careers.',
+      color: 'from-rose-500 to-pink-500'
     }
   ];
 
@@ -36,13 +36,13 @@ export default function About() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono mb-4">
             <Award className="w-3.5 h-3.5" />
-            <span>HONORING EXCELLENCE</span>
+            <span>CSE DEPARTMENT COMMUNITY</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Why We Celebrate On <span className="gradient-text">3rd September</span>
+            Empowering Innovation &amp; <span className="gradient-text">Community</span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            In the fast-paced world of computer science, code syntax updates every season, but the wisdom, critical thinking, and perseverance instilled by our teachers stay with us for a lifetime.
+            The Computer Science &amp; Engineering department is dedicated to building both technical mastery and a vibrant community of passionate engineers.
           </p>
         </div>
 
@@ -62,26 +62,22 @@ export default function About() {
           ))}
         </div>
 
-        {/* Featured Quote Banner */}
+        {/* Department Info Banner */}
         <div className="glass-panel-glow rounded-3xl p-8 sm:p-12 relative overflow-hidden">
-          <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
-            <Quote className="w-64 h-64 text-blue-400" />
-          </div>
-
           <div className="relative z-10 max-w-3xl">
-            <div className="flex items-center gap-2 text-amber-400 text-xs font-mono uppercase tracking-widest mb-3">
-              <Quote className="w-4 h-4" /> Message from Students
+            <div className="flex items-center gap-2 text-blue-400 text-xs font-mono uppercase tracking-widest mb-3">
+              <Code2 className="w-4 h-4" /> Department Vision
             </div>
             <blockquote className="text-lg sm:text-2xl font-medium text-white italic leading-relaxed mb-6">
-              "A teacher doesn't just show you how to write code; they teach you how to think, how to question, and how to engineer solutions that change the world."
+              "Fostering curiosity, ethical engineering, and collaborative spirit through every event, seminar, and celebration we organize."
             </blockquote>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-mono font-bold text-white text-xs">
                 CSE
               </div>
               <div>
-                <div className="text-white font-semibold text-sm">Computer Science & Engineering Student Council</div>
-                <div className="text-slate-400 text-xs font-mono">Teachers' Day Organizing Committee 2026</div>
+                <div className="text-white font-semibold text-sm">Department of Computer Science &amp; Engineering</div>
+                <div className="text-slate-400 text-xs font-mono">Event Coordination &amp; Student Welfare Committee</div>
               </div>
             </div>
           </div>

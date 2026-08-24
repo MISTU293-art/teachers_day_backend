@@ -8,7 +8,7 @@ const startServer = async () => {
     // 1. Connect to Database
     await connectDB();
 
-    // 2. Initialize / Sync SuperAdmin from environment
+    // 2. Initialize / Sync SuperAdmin from environment (No demo data seeded)
     await seederService.initSuperAdmin();
 
     // 3. Start HTTP Server

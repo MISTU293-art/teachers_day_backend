@@ -3,7 +3,8 @@ const env = require('../config/env.config');
 const { ROLES } = require('../config/constants');
 
 /**
- * Initializes SuperAdmin from environment variables on app startup
+ * Initializes SuperAdmin strictly from environment variables on app startup.
+ * NO dummy or demo content is seeded.
  */
 const initSuperAdmin = async () => {
   try {
@@ -20,7 +21,7 @@ const initSuperAdmin = async () => {
           isActive: true
         });
         await superAdminUser.save();
-        console.log(`[Seeder] SuperAdmin account initialized successfully: ${env.superAdmin.email}`);
+        console.log(`[Seeder] SuperAdmin account initialized: ${env.superAdmin.email}`);
       } catch (insertErr) {
         if (insertErr.code !== 11000) {
           throw insertErr;

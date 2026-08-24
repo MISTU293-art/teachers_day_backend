@@ -40,7 +40,7 @@ export default function ParticipateForm() {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:3000/api/participate', {
+      const res = await fetch('https://teachers-day-backend.onrender.com/api/participate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
