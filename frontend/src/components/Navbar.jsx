@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Terminal, Calendar, Sparkles, Image, Mic2, ShieldCheck, Menu, X, Layers, Award } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -74,7 +75,7 @@ export default function Navbar() {
             </a>
 
             <a
-              href="http://localhost:3000/auth/login"
+              href={API_ENDPOINTS.ADMIN_LOGIN}
               target="_blank"
               rel="noreferrer"
               className="px-3 py-2 rounded-xl text-xs font-medium text-slate-300 bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:text-white transition-all flex items-center gap-1.5"
@@ -88,7 +89,7 @@ export default function Navbar() {
           {/* Mobile menu toggle */}
           <div className="lg:hidden flex items-center gap-2">
             <a
-              href="http://localhost:3000/auth/login"
+              href={API_ENDPOINTS.ADMIN_LOGIN}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 text-xs"
@@ -131,7 +132,7 @@ export default function Navbar() {
                   Join / Register Performance
                 </a>
                 <a
-                  href="http://localhost:3000/auth/login"
+                  href={API_ENDPOINTS.ADMIN_LOGIN}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full text-center py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-slate-800 border border-slate-700"

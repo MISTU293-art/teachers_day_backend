@@ -56,7 +56,59 @@
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
       </div>
-    </div>
+</div>
+
+<!-- Event & Portal Quick Links -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-4">
+    <a href="/programs" class="text-decoration-none">
+      <div class="cse-card p-3 d-flex align-items-center justify-content-between border-start border-primary border-4 h-100 hover-shadow transition-all">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+            <i class="fa-solid fa-calendar-check fa-lg"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0"><%= stats.totalPrograms || 0 %></h5>
+            <span class="text-secondary small" style="font-size: 0.75rem;">Department Programs</span>
+          </div>
+        </div>
+        <span class="btn btn-outline-primary btn-sm py-0 px-2" style="font-size: 0.72rem;">View</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <a href="/gallery/upload" class="text-decoration-none">
+      <div class="cse-card p-3 d-flex align-items-center justify-content-between border-start border-info border-4 h-100 hover-shadow transition-all">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-info bg-opacity-10 text-info p-2 rounded-3">
+            <i class="fa-solid fa-cloud-arrow-up fa-lg"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0"><%= stats.totalGalleryPhotos || 0 %></h5>
+            <span class="text-secondary small" style="font-size: 0.75rem;">Upload Event Photos</span>
+          </div>
+        </div>
+        <span class="btn btn-outline-info btn-sm py-0 px-2" style="font-size: 0.72rem;">Upload</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <a href="/participations" class="text-decoration-none">
+      <div class="cse-card p-3 d-flex align-items-center justify-content-between border-start border-warning border-4 h-100 hover-shadow transition-all">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-warning bg-opacity-10 text-warning p-2 rounded-3">
+            <i class="fa-solid fa-microphone-lines fa-lg"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0"><%= stats.totalParticipations || 0 %></h5>
+            <span class="text-secondary small" style="font-size: 0.75rem;">Performance Submissions</span>
+          </div>
+        </div>
+        <span class="btn btn-outline-warning btn-sm py-0 px-2" style="font-size: 0.72rem;">Review</span>
+      </div>
+    </a>
   </div>
 </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layers, Calendar, Clock, MapPin, Tag, ArrowUpRight, Sparkles, RefreshCw, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function Programs() {
   const [programs, setPrograms] = useState([]);
@@ -22,7 +23,7 @@ export default function Programs() {
 
   const fetchPrograms = () => {
     setLoading(true);
-    fetch('http://localhost:3000/api/programs')
+    fetch(API_ENDPOINTS.PROGRAMS)
       .then(res => res.json())
       .then(data => {
         if (data.success && Array.isArray(data.data)) {
@@ -211,7 +212,7 @@ export default function Programs() {
               Programs and events added by department administrators will appear here in real-time.
             </p>
             <a
-              href="http://localhost:3000/programs/create"
+              href={API_ENDPOINTS.ADMIN_PROGRAM_CREATE}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors"

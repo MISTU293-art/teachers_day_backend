@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mic2, Send, Sparkles, CheckCircle2, AlertCircle, Users, Phone, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function ParticipateForm() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,8 @@ export default function ParticipateForm() {
     'Instrumental',
     'Mimicry',
     'Speech',
+    'Hackathon Project Demo',
+    'Technical Presentation',
     'Other'
   ];
 
@@ -40,7 +43,7 @@ export default function ParticipateForm() {
     setError(null);
 
     try {
-      const res = await fetch('https://teachers-day-backend.onrender.com/api/participate', {
+      const res = await fetch(API_ENDPOINTS.PARTICIPATE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -60,7 +63,7 @@ export default function ParticipateForm() {
         setError(data.message || 'Failed to submit registration. Please try again.');
       }
     } catch (err) {
-      setError('Unable to connect to the backend server. Please make sure the backend server is running on port 3000.');
+      setError('Unable to reach backend server. Please verify backend is running.');
     } finally {
       setLoading(false);
     }
@@ -76,10 +79,10 @@ export default function ParticipateForm() {
             <span>OPEN TO ALL CSE STUDENTS</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Want To <span className="gradient-gold">Perform?</span>
+            Want To <span className="gradient-gold">Perform / Participate?</span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Showcase your talent on stage for our respected teachers. Solo and team registrations across dance, music, poetry, and comedy are welcome!
+            Showcase your talent or present your project in upcoming CSE department events. Solo and team submissions are welcome!
           </p>
         </div>
 
@@ -96,7 +99,7 @@ export default function ParticipateForm() {
 
             <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-400 mb-6 text-left">
               <p className="mb-1"><span className="text-slate-500">Student:</span> {formData.name} ({formData.year})</p>
-              <p className="mb-1"><span className="text-slate-500">Performance:</span> {formData.performance}</p>
+              <p className="mb-1"><span className="text-slate-500">Category:</span> {formData.performance}</p>
               <p className="mb-1"><span className="text-slate-500">Contact:</span> {formData.contact}</p>
               <p className="text-emerald-400 mt-2">✓ Synced to Admin Review Console</p>
             </div>
@@ -149,7 +152,7 @@ export default function ParticipateForm() {
                 {/* Contact */}
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                    Contact (WhatsApp / Phone) <span className="text-rose-400">*</span>
+                    Contact (WhatsApp / Phone / Email) <span className="text-rose-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -157,7 +160,7 @@ export default function ParticipateForm() {
                     required
                     value={formData.contact}
                     onChange={handleChange}
-                    placeholder="e.g. 9876543210"
+                    placeholder="e.g. 9876543210 or name@cse.edu"
                     className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white placeholder-slate-500 text-sm outline-none transition-all"
                   />
                 </div>
@@ -181,10 +184,10 @@ export default function ParticipateForm() {
                   </select>
                 </div>
 
-                {/* Performance Category */}
+                {/* Category */}
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                    Performance Category <span className="text-rose-400">*</span>
+                    Performance / Submission Category <span className="text-rose-400">*</span>
                   </label>
                   <select
                     name="performance"
@@ -199,25 +202,25 @@ export default function ParticipateForm() {
                 </div>
               </div>
 
-              {/* Performance Details */}
+              {/* Details */}
               <div>
                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                  Song / Skit / Act Details
+                  Act / Song / Presentation Details
                 </label>
                 <textarea
                   name="performanceDetails"
                   rows="2"
                   value={formData.performanceDetails}
                   onChange={handleChange}
-                  placeholder="e.g. Solo Bollywood acoustic medley / 5-min funny skit on Semester Exams"
+                  placeholder="e.g. Solo acoustic performance / 5-min funny skit / Project demo on ML algorithms"
                   className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 focus:border-blue-500 text-white placeholder-slate-500 text-sm outline-none transition-all"
                 />
               </div>
 
-              {/* Team Members (Optional) */}
+              {/* Team Members */}
               <div>
                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                  Team Members (If group performance)
+                  Team Members (If group submission)
                 </label>
                 <input
                   type="text"

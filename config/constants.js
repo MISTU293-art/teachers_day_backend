@@ -128,6 +128,8 @@ module.exports = {
     'Instrumental',
     'Mimicry',
     'Speech',
+    'Hackathon Project Demo',
+    'Technical Presentation',
     'Other'
   ],
 

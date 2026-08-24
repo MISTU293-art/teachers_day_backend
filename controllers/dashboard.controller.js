@@ -73,9 +73,14 @@ const renderDashboard = asyncHandler(async (req, res) => {
     myTransactionsCount = myCollectionAgg[0]?.count || 0;
   }
 
-  // Admins & Invitations counts
-  const totalAdmins = await User.countDocuments({ role: ROLES.ADMIN, isActive: true });
-  const totalInvitations = await Invitation.countDocuments();
+  // Admins, Invitations, Programs, Gallery, and Participations counts
+  const [totalAdmins, totalInvitations, totalPrograms, totalGalleryPhotos, totalParticipations] = await Promise.all([
+    User.countDocuments({ role: ROLES.ADMIN, isActive: true }),
+    Invitation.countDocuments(),
+    require('../models/program.model').countDocuments(),
+    require('../models/gallery.model').countDocuments(),
+    require('../models/participation.model').countDocuments()
+  ]);
 
   // Recent Collections Feed (last 6)
   const recentCollections = await Contribution.find({ isDeleted: false })
@@ -105,6 +110,9 @@ const renderDashboard = asyncHandler(async (req, res) => {
       totalTransactions,
       totalAdmins,
       totalInvitations,
+      totalPrograms,
+      totalGalleryPhotos,
+      totalParticipations,
       approvedExpensesCount,
       pendingExpensesCount,
       myCollectionsTotal,

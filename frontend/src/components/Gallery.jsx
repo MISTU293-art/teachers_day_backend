@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image as ImageIcon, X, Maximize2, ExternalLink, RefreshCw, UploadCloud, Sparkles } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
@@ -10,7 +11,7 @@ export default function Gallery() {
   const fetchGallery = async () => {
     setLoading(true);
     try {
-      const res = await fetch('https://teachers-day-backend.onrender.com/api/gallery');
+      const res = await fetch(API_ENDPOINTS.GALLERY);
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
@@ -137,7 +138,7 @@ export default function Gallery() {
               Official photos uploaded by department coordinators via ImageKit CDN will appear here.
             </p>
             <a
-              href="http://localhost:3000/gallery/upload"
+              href={API_ENDPOINTS.ADMIN_GALLERY_UPLOAD}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition-colors"

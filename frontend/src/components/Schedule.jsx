@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, MapPin, Sparkles, Calendar, Layers } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function Schedule() {
   const [activeProgram, setActiveProgram] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/programs/featured')
+    fetch(API_ENDPOINTS.FEATURED_PROGRAM)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data) {

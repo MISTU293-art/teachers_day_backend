@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Sparkles, ChevronRight, Terminal, Code2, Layers, Clock, AlertCircle } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 export default function Hero() {
   const [featuredEvent, setFeaturedEvent] = useState(null);
@@ -7,7 +8,7 @@ export default function Hero() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/programs/featured')
+    fetch(API_ENDPOINTS.FEATURED_PROGRAM)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data) {
@@ -25,13 +26,11 @@ export default function Hero() {
   useEffect(() => {
     if (!featuredEvent || !featuredEvent.eventDate) return;
 
-    // Parse date if possible
     let targetDate = null;
     const parsed = Date.parse(featuredEvent.eventDate);
     if (!isNaN(parsed)) {
       targetDate = new Date(parsed);
     } else {
-      // If natural format like "3rd September 2026", normalize
       const cleanDateStr = featuredEvent.eventDate.replace(/(st|nd|rd|th)/i, '');
       const d = Date.parse(cleanDateStr);
       if (!isNaN(d)) targetDate = new Date(d);
@@ -75,13 +74,13 @@ export default function Hero() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-mono mb-6 backdrop-blur-md animate-float">
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>CSE DEPARTMENT • EVENT & PROGRAM MANAGEMENT HUB</span>
+            <span>CSE DEPARTMENT • EVENT &amp; PROGRAM MANAGEMENT HUB</span>
           </div>
 
           {/* Main Title */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
             Department of <br className="hidden sm:inline" />
-            <span className="gradient-text">Computer Science & Engineering</span>
+            <span className="gradient-text">Computer Science &amp; Engineering</span>
           </h1>
 
           {/* Subtitle */}
@@ -89,7 +88,7 @@ export default function Hero() {
             Centralized portal for all CSE department programs, celebrations, technical hackathons, cultural events, and workshops. All schedules and photos are updated live by department administrators.
           </p>
 
-          {/* Featured Event Card (If added in backend) */}
+          {/* Featured Event Card */}
           {featuredEvent ? (
             <div className="glass-panel-glow rounded-2xl p-4 sm:p-6 max-w-2xl mx-auto mb-10 border border-blue-500/30 text-left">
               <div className="flex items-center justify-between gap-2 mb-2">
@@ -125,7 +124,7 @@ export default function Hero() {
             </div>
           )}
 
-          {/* Countdown Timer (If active target date exists) */}
+          {/* Countdown Timer */}
           {(timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0) && (
             <div className="grid grid-cols-4 gap-3 sm:gap-6 max-w-xl mx-auto mb-10">
               {[
