@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+
+<div class="page-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+  <div>
+    <a href="/gallery" class="btn btn-light btn-sm mb-2"><i class="fa-solid fa-arrow-left me-1"></i>Back to Gallery</a>
+    <h4 class="page-title mb-1"><i class="fa-solid fa-cloud-arrow-up me-2 text-primary"></i>Upload Event Photos</h4>
+    <p class="page-subtitle mb-0">Directly upload high-resolution celebration photos to ImageKit.io CDN</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger py-2 small mb-4">
+            <i class="fa-solid fa-circle-exclamation me-2"></i><%= error %>
+          </div>
+        <% } %>
+
+        <form action="/gallery/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Select Images <span class="text-danger">*</span></label>
+            <input type="file" name="images" class="form-control" accept="image/*" multiple required id="imageInput" onchange="previewSelectedFiles(this)">
+            <div class="form-text text-muted small">Supports JPEG, PNG, WebP, GIF (Max 10 MB per file, up to 10 files at once).</div>
+          </div>
+
+          <!-- Preview thumbnails -->
+          <div id="previewContainer" class="d-flex flex-wrap gap-2 mb-3 d-none"></div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Title / Caption</label>
+            <input type="text" name="title" class="form-control" placeholder="e.g. Stage Inauguration & Lamp Lighting">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Description / Notes</label>
+            <textarea name="description" rows="2" class="form-control" placeholder="Optional context or batch description..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Tags (comma-separated)</label>
+            <input type="text" name="tags" class="form-control" placeholder="e.g. stage, teachers, celebration, 2026">
+          </div>
+
+          <div class="mb-4 form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="isPublic" value="true" id="publicSwitch" checked>
+            <label class="form-check-label fw-semibold" for="publicSwitch">Display in Public Gallery on React Website</label>
+          </div>
+
+          <div class="d-flex gap-2">
+            <a href="/gallery" class="btn btn-light flex-grow-1">Cancel</a>
+            <button type="submit" class="btn btn-primary flex-grow-1 fw-semibold" id="uploadBtn">
+              <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload to ImageKit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewSelectedFiles(input) {
+  const container = document.getElementById('previewContainer');
+  container.innerHTML = '';
+  if (input.files && input.files.length > 0) {
+    container.classList.remove('d-none');
+    Array.from(input.files).forEach(file => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.width = '64px';
+          img.style.height = '64px';
+          img.style.objectFit = 'cover';
+          img.className = 'rounded border';
+          container.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  } else {
+    container.classList.add('d-none');
+  }
+}
+
+document.getElementById('uploadForm').addEventListener('submit', function() {
+  const btn = document.getElementById('uploadBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Uploading to ImageKit...';
+});
+</script>
+
+<%- include('../partials/footer') %>

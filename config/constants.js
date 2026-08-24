@@ -54,6 +54,8 @@ module.exports = {
     INVITATIONS: 'INVITATIONS',
     ADMINS: 'ADMINS',
     REPORTS: 'REPORTS',
+    GALLERY: 'GALLERY',
+    PARTICIPATIONS: 'PARTICIPATIONS',
     SYSTEM: 'SYSTEM'
   },
 
@@ -80,8 +82,23 @@ module.exports = {
     CREATE_INVITATION: 'CREATE_INVITATION',
     UPDATE_INVITATION: 'UPDATE_INVITATION',
     DELETE_INVITATION: 'DELETE_INVITATION',
-    EXPORT_REPORT: 'EXPORT_REPORT'
+    EXPORT_REPORT: 'EXPORT_REPORT',
+    UPLOAD_IMAGE: 'UPLOAD_IMAGE',
+    DELETE_IMAGE: 'DELETE_IMAGE',
+    REVIEW_PARTICIPATION: 'REVIEW_PARTICIPATION'
   },
+
+  PERFORMANCE_TYPES: [
+    'Dance',
+    'Singing',
+    'Poetry',
+    'Skit',
+    'Standup Comedy',
+    'Instrumental',
+    'Mimicry',
+    'Speech',
+    'Other'
+  ],
 
   DEFAULT_PAGINATION_LIMIT: 20,
   MAX_PAGINATION_LIMIT: 100

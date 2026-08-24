@@ -1,0 +1,199 @@
+<%- include('../partials/header') %>
+
+<div class="page-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
+  <div>
+    <h4 class="page-title mb-1"><i class="fa-solid fa-microphone-lines me-2 text-warning"></i>Student Performance Registrations</h4>
+    <p class="page-subtitle mb-0">Review student registrations submitted via the public React website for Teachers' Day 2026</p>
+  </div>
+</div>
+
+<!-- Flash messages -->
+<% if (typeof query !== 'undefined' && query.msg) { %>
+  <div class="alert alert-success alert-dismissible fade show py-2 small mb-3" role="alert">
+    <i class="fa-solid fa-circle-check me-2"></i><%= query.msg %>
+    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-4">
+    <div class="stat-card blue">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <div class="text-muted small fw-semibold text-uppercase">Total Registrations</div>
+          <h3 class="fw-bold text-dark mb-0 mt-1"><%= counts.total %></h3>
+          <span class="text-muted small" style="font-size: 0.75rem;">From React form</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+    <div class="stat-card yellow">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <div class="text-muted small fw-semibold text-uppercase">Pending Review</div>
+          <h3 class="fw-bold text-warning mb-0 mt-1"><%= counts.pending %></h3>
+          <span class="text-warning small" style="font-size: 0.75rem;">Awaiting coordinator contact</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-hourglass-half"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-4">
+    <div class="stat-card green">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <div class="text-muted small fw-semibold text-uppercase">Reviewed & Confirmed</div>
+          <h3 class="fw-bold text-success mb-0 mt-1"><%= counts.reviewed %></h3>
+          <span class="text-success small" style="font-size: 0.75rem;">Slot assigned</span>
+        </div>
+        <div class="stat-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body py-3">
+    <form action="/participations" method="GET" class="row g-2 align-items-end">
+      <div class="col-12 col-md-4">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Search</label>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+          <input type="text" name="search" class="form-control" placeholder="Search name, phone, details..." value="<%= query.search || '' %>">
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Year</label>
+        <select name="year" class="form-select form-select-sm">
+          <option value="">All Years</option>
+          <% years.forEach(y => { %>
+            <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>><%= y %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label class="form-label form-label-sm fw-semibold text-muted mb-1">Performance Type</label>
+        <select name="performance" class="form-select form-select-sm">
+          <option value="">All Performances</option>
+          <% performanceTypes.forEach(p => { %>
+            <option value="<%= p %>" <%= query.performance === p ? 'selected' : '' %>><%= p %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+          <i class="fa-solid fa-filter me-1"></i>Filter
+        </button>
+        <% if (query.search || query.year || query.performance || query.reviewed) { %>
+          <a href="/participations" class="btn btn-outline-secondary btn-sm" title="Clear">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Participations Table -->
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light border-bottom">
+        <tr>
+          <th class="ps-4">Student & Year</th>
+          <th>Contact</th>
+          <th>Performance</th>
+          <th>Details / Team</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th class="pe-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (participations && participations.length > 0) { %>
+          <% participations.forEach(p => { %>
+            <tr>
+              <td class="ps-4">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="avatar-circle avatar-primary"><%= p.name.charAt(0).toUpperCase() %></div>
+                  <div>
+                    <div class="fw-semibold text-dark"><%= p.name %></div>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 0.7rem;"><%= p.year %></span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-dark small fw-semibold"><i class="fa-solid fa-phone me-1 text-muted"></i><%= p.contact %></span>
+              </td>
+              <td>
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle fw-semibold">
+                  <i class="fa-solid fa-star me-1"></i><%= p.performance %>
+                </span>
+              </td>
+              <td style="max-width: 250px;">
+                <% if (p.performanceDetails) { %>
+                  <div class="text-truncate small text-dark" title="<%= p.performanceDetails %>"><%= p.performanceDetails %></div>
+                <% } %>
+                <% if (p.teamMembers) { %>
+                  <div class="text-muted small text-truncate" title="<%= p.teamMembers %>" style="font-size: 0.72rem;"><i class="fa-solid fa-users me-1"></i><%= p.teamMembers %></div>
+                <% } %>
+              </td>
+              <td>
+                <% if (p.isReviewed) { %>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-solid fa-check me-1"></i>Reviewed</span>
+                  <% if (p.reviewedBy) { %>
+                    <div class="text-muted small" style="font-size: 0.68rem;">by <%= p.reviewedBy.name %></div>
+                  <% } %>
+                <% } else { %>
+                  <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="fa-solid fa-clock me-1"></i>Pending</span>
+                <% } %>
+              </td>
+              <td class="text-muted small"><%= new Date(p.createdAt).toLocaleDateString('en-IN') %></td>
+              <td class="pe-4">
+                <div class="d-flex align-items-center gap-1">
+                  <form action="/participations/<%= p._id %>/review" method="POST" class="d-inline">
+                    <button type="submit" class="btn <%= p.isReviewed ? 'btn-outline-warning' : 'btn-success' %> btn-sm py-0 px-2" style="font-size: 0.75rem;" title="<%= p.isReviewed ? 'Mark as Pending' : 'Mark as Reviewed' %>">
+                      <i class="fa-solid <%= p.isReviewed ? 'fa-rotate-left' : 'fa-check' %> me-1"></i><%= p.isReviewed ? 'Undo' : 'Review' %>
+                    </button>
+                  </form>
+                  <% if (currentUser && currentUser.role === 'superadmin') { %>
+                    <form action="/participations/<%= p._id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this registration permanently?')">
+                      <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.75rem;" title="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="7" class="text-center text-muted py-5">
+              <i class="fa-solid fa-clipboard-list fa-3x mb-3 opacity-50 d-block"></i>
+              No student performance registrations yet.
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/pagination') %>
+<%- include('../partials/footer') %>

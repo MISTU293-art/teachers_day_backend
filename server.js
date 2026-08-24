@@ -11,10 +11,7 @@ const startServer = async () => {
     // 2. Initialize / Sync SuperAdmin from environment
     await seederService.initSuperAdmin();
 
-    // 3. Seed demo dataset if database is empty
-    await seederService.seedSampleData();
-
-    // 4. Start HTTP Server
+    // 3. Start HTTP Server
     const server = app.listen(env.port, () => {
       console.log(`\n========================================================`);
       console.log(`🚀 [CSE EventLedger] Server running in ${env.nodeEnv.toUpperCase()} mode`);

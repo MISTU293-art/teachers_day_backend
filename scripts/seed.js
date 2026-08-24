@@ -6,12 +6,11 @@ const runSeed = async () => {
   try {
     await connectDB();
     await seederService.initSuperAdmin();
-    await seederService.seedSampleData();
-    console.log('✅ Seeding completed.');
+    console.log('✅ SuperAdmin setup completed.');
     await mongoose.connection.close();
     process.exit(0);
   } catch (err) {
-    console.error('❌ Seeding failed:', err);
+    console.error('❌ SuperAdmin setup failed:', err);
     process.exit(1);
   }
 };

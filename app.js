@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
 const methodOverride = require('method-override');
 const env = require('./config/env.config');
 const { apiLimiter } = require('./middleware/rateLimit.middleware');
@@ -18,14 +19,26 @@ const invitationRoutes = require('./routes/invitation.routes');
 const adminRoutes = require('./routes/admin.routes');
 const reportRoutes = require('./routes/report.routes');
 const auditRoutes = require('./routes/audit.routes');
+const galleryRoutes = require('./routes/gallery.routes');
+const participationRoutes = require('./routes/participation.routes');
+const apiRoutes = require('./routes/api.routes');
 
 const app = express();
 
-// Security HTTP headers with Helmet (allow CDN assets like FontAwesome & Chart.js)
+// Security HTTP headers with Helmet
 app.use(
   helmet({
-    contentSecurityPolicy: false, // Disabled for inline scripts & CDN stylesheets used in EJS views
+    contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
+  })
+);
+
+// Enable CORS for React frontend
+app.use(
+  cors({
+    origin: [env.reactFrontendUrl, 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
   })
 );
 
@@ -67,18 +80,27 @@ app.get('/', (req, res) => {
   res.redirect('/auth/login');
 });
 
-app.use("/health",(req,res)=>{
+// Health check endpoint
+app.use('/health', (req, res) => {
   res.status(200).json({
-    message:"All Is Good"
-  })
-})
-// Mount modular routes
+    status: 'healthy',
+    message: 'CSE EventLedger Server Active',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Public API endpoints for React Frontend
+app.use('/api', apiRoutes);
+
+// Admin Portal routes
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/students', studentRoutes);
 app.use('/contributions', contributionRoutes);
 app.use('/expenses', expenseRoutes);
 app.use('/invitations', invitationRoutes);
+app.use('/gallery', galleryRoutes);
+app.use('/participations', participationRoutes);
 app.use('/admins', adminRoutes);
 app.use('/reports', reportRoutes);
 app.use('/audit', auditRoutes);
