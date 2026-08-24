@@ -1,4 +1,5 @@
 const express = require('express');
+const cors =required('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -36,7 +37,7 @@ app.use(
 // Enable CORS for React frontend
 app.use(
   cors({
-    origin: [env.reactFrontendUrl, 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+    origin: [env.reactFrontendUrl, 'https://teachers-day-gimt-2026-v1.vercel.app', 'http://127.0.0.1:5173', 'http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
   })
