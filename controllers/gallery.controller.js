@@ -95,7 +95,14 @@ const uploadImages = asyncHandler(async (req, res) => {
     } catch (err) {
       console.error('ImageKit upload error for file:', file.originalname, err);
       if (uploadedResults.length === 0) {
-        throw new Error(`Upload to ImageKit failed: ${err.message}`);
+        if (req.xhr || req.headers.accept?.includes('json')) {
+          return res.status(500).json({ success: false, message: `Upload failed: ${err.message}` });
+        }
+        return res.status(500).render('gallery/upload', {
+          title: 'Upload Event Photos | CSE EventLedger',
+          currentUser: req.user,
+          error: `Upload failed: ${err.message}. Please verify ImageKit credentials in .env`
+        });
       }
     }
   }

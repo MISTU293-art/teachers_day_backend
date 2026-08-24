@@ -34,12 +34,13 @@ app.use(
   })
 );
 
-// Enable CORS for React frontend
+// Enable CORS for React frontend (universal origin support)
 app.use(
   cors({
-    origin: [env.reactFrontendUrl, 'https://teachers-day-gimt-2026-v1.vercel.app', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+    origin: true,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With']
   })
 );
 
