@@ -199,7 +199,112 @@ const exportExpensesToExcel = async (expenses) => {
 };
 
 /**
- * Generates standard UTF-8 CSV with BOM
+ * Generates an Excel workbook for student performance/participation registrations
+ */
+const exportParticipationsToExcel = async (participations) => {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'CSE Department Event Management System';
+  workbook.created = new Date();
+
+  const worksheet = workbook.addWorksheet('Performances & Registrations', {
+    properties: { tabColor: { argb: 'F59E0B' } },
+    pageSetup: { fitToPage: true, fitToWidth: 1, fitToHeight: 0 }
+  });
+
+  worksheet.columns = [
+    { header: '#', key: 'index', width: 6 },
+    { header: 'Student Name', key: 'name', width: 22 },
+    { header: 'Academic Year', key: 'year', width: 15 },
+    { header: 'Contact Details', key: 'contact', width: 20 },
+    { header: 'Performance / Category', key: 'performance', width: 24 },
+    { header: 'Act Details', key: 'performanceDetails', width: 32 },
+    { header: 'Team Members', key: 'teamMembers', width: 28 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Reviewed By', key: 'reviewedBy', width: 20 },
+    { header: 'Submission Date', key: 'submittedAt', width: 20 }
+  ];
+
+  worksheet.insertRow(1, ['DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING']);
+  worksheet.insertRow(2, ['STUDENT PERFORMANCE & PARTICIPATION REGISTRATIONS 2026']);
+  worksheet.insertRow(3, [`Generated On: ${new Date().toLocaleString('en-IN')} | Total Registrations: ${participations.length}`]);
+  worksheet.insertRow(4, []); // spacer
+
+  worksheet.mergeCells('A1:J1');
+  worksheet.mergeCells('A2:J2');
+  worksheet.mergeCells('A3:J3');
+
+  const titleRow1 = worksheet.getRow(1);
+  titleRow1.font = { name: 'Calibri', size: 16, bold: true, color: { argb: 'FFFFFF' } };
+  titleRow1.alignment = { horizontal: 'center', vertical: 'middle' };
+  titleRow1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0F172A' } };
+
+  const titleRow2 = worksheet.getRow(2);
+  titleRow2.font = { name: 'Calibri', size: 13, bold: true, color: { argb: 'F8FAFC' } };
+  titleRow2.alignment = { horizontal: 'center', vertical: 'middle' };
+  titleRow2.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1E293B' } };
+
+  const titleRow3 = worksheet.getRow(3);
+  titleRow3.font = { name: 'Calibri', size: 10, italic: true, color: { argb: '64748B' } };
+  titleRow3.alignment = { horizontal: 'center', vertical: 'middle' };
+
+  // Header row formatting (row 5)
+  const headerRow = worksheet.getRow(5);
+  headerRow.font = { bold: true, color: { argb: 'FFFFFF' } };
+  headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D97706' } }; // Warm Amber/Gold
+  headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+  headerRow.height = 24;
+
+  let reviewedCount = 0;
+
+  participations.forEach((p, index) => {
+    if (p.isReviewed) reviewedCount++;
+
+    const row = worksheet.addRow({
+      index: index + 1,
+      name: p.name || 'N/A',
+      year: p.year || 'N/A',
+      contact: p.contact || 'N/A',
+      performance: p.performance || 'N/A',
+      performanceDetails: p.performanceDetails || '-',
+      teamMembers: p.teamMembers || '-',
+      status: p.isReviewed ? 'REVIEWED' : 'PENDING',
+      reviewedBy: p.reviewedBy?.name || (p.isReviewed ? 'Admin' : '-'),
+      submittedAt: new Date(p.createdAt).toLocaleDateString('en-IN')
+    });
+
+    // Color code status cell
+    const statusCell = row.getCell('status');
+    if (p.isReviewed) {
+      statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'DCFCE7' } }; // light green
+      statusCell.font = { bold: true, color: { argb: '166534' } };
+    } else {
+      statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FEF3C7' } }; // light yellow
+      statusCell.font = { bold: true, color: { argb: '92400E' } };
+    }
+  });
+
+  // Summary Row
+  const summaryRow = worksheet.addRow({
+    index: '',
+    name: 'TOTAL REGISTRATIONS:',
+    year: `${participations.length} Students`,
+    contact: '',
+    performance: '',
+    performanceDetails: '',
+    teamMembers: 'REVIEWED:',
+    status: `${reviewedCount} / ${participations.length}`,
+    reviewedBy: '',
+    submittedAt: ''
+  });
+
+  summaryRow.font = { bold: true, size: 11 };
+  summaryRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F1F5F9' } };
+
+  return workbook;
+};
+
+/**
+ * Generates standard UTF-8 CSV with BOM for Contributions
  */
 const exportContributionsToCSV = (contributions) => {
   const headers = [
@@ -233,12 +338,48 @@ const exportContributionsToCSV = (contributions) => {
     ].join(',');
   });
 
-  // UTF-8 BOM + Header + Rows
+  return '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+};
+
+/**
+ * Generates standard UTF-8 CSV with BOM for Participations
+ */
+const exportParticipationsToCSV = (participations) => {
+  const headers = [
+    'Index',
+    'Student Name',
+    'Academic Year',
+    'Contact (Phone / Email)',
+    'Performance / Category',
+    'Act Details',
+    'Team Members',
+    'Status',
+    'Reviewed By',
+    'Submission Date'
+  ];
+
+  const rows = participations.map((p, index) => {
+    return [
+      index + 1,
+      `"${(p.name || '').replace(/"/g, '""')}"`,
+      `"${p.year || ''}"`,
+      `"${(p.contact || '').replace(/"/g, '""')}"`,
+      `"${(p.performance || '').replace(/"/g, '""')}"`,
+      `"${(p.performanceDetails || '').replace(/"/g, '""')}"`,
+      `"${(p.teamMembers || '').replace(/"/g, '""')}"`,
+      `"${p.isReviewed ? 'Reviewed' : 'Pending'}"`,
+      `"${(p.reviewedBy?.name || (p.isReviewed ? 'Admin' : '')).replace(/"/g, '""')}"`,
+      `"${new Date(p.createdAt).toLocaleDateString('en-IN')}"`
+    ].join(',');
+  });
+
   return '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
 };
 
 module.exports = {
   exportContributionsToExcel,
   exportExpensesToExcel,
-  exportContributionsToCSV
+  exportParticipationsToExcel,
+  exportContributionsToCSV,
+  exportParticipationsToCSV
 };

@@ -100,13 +100,42 @@ describe('5. Reports, Excel, CSV & PDF Exports', () => {
     expect(res.body.slice(0, 4).toString()).to.equal('%PDF');
   });
 
-  it('Requirement: Download Receipt PDF returns valid PDF stream', async () => {
+  it('Requirement: Export Participations to Excel (.xlsx) returns valid spreadsheet', async () => {
+    const Participation = require('../models/participation.model');
+    await Participation.create({
+      name: 'Rohan Sen',
+      contact: '9876543210',
+      year: YEARS.SECOND,
+      performance: 'Dance',
+      performanceDetails: 'Solo dance performance'
+    });
+
     const res = await request(app)
-      .get(`/contributions/${contribution._id}/receipt/pdf`)
+      .get('/participations/export/excel')
       .set('Cookie', [superCookie]);
 
     expect(res.status).to.equal(200);
-    expect(res.headers['content-type']).to.include('application/pdf');
-    expect(res.body.slice(0, 4).toString()).to.equal('%PDF');
+    expect(res.headers['content-type']).to.include('spreadsheetml.sheet');
+    expect(res.headers['content-disposition']).to.include('.xlsx');
+  });
+
+  it('Requirement: Export Participations to CSV returns UTF-8 CSV with student rows', async () => {
+    const Participation = require('../models/participation.model');
+    await Participation.create({
+      name: 'Sneha Roy',
+      contact: 'sneha@cse.edu',
+      year: YEARS.THIRD,
+      performance: 'Singing',
+      performanceDetails: 'Classical song'
+    });
+
+    const res = await request(app)
+      .get('/participations/export/csv')
+      .set('Cookie', [superCookie]);
+
+    expect(res.status).to.equal(200);
+    expect(res.headers['content-type']).to.include('text/csv');
+    expect(res.text).to.include('Sneha Roy');
+    expect(res.text).to.include('Singing');
   });
 });

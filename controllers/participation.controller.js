@@ -1,5 +1,6 @@
 const Participation = require('../models/participation.model');
 const auditService = require('../services/audit.service');
+const exportService = require('../services/export.service');
 const { AUDIT_MODULES, AUDIT_ACTIONS, YEARS, PERFORMANCE_TYPES } = require('../config/constants');
 const asyncHandler = require('../utils/asyncHandler');
 const { getPagination, buildPaginationData } = require('../utils/pagination');
@@ -36,12 +37,10 @@ const submitParticipationAPI = asyncHandler(async (req, res) => {
 });
 
 /**
- * Admin portal: List all participation submissions
+ * Helper to build query filter for participations
  */
-const listParticipations = asyncHandler(async (req, res) => {
-  const { page, limit, skip } = getPagination(req.query, 20);
-  const { year, performance, reviewed, search } = req.query;
-
+const buildParticipationFilter = (query) => {
+  const { year, performance, reviewed, search } = query;
   const filter = {};
 
   if (year && Object.values(YEARS).includes(year)) {
@@ -67,6 +66,16 @@ const listParticipations = asyncHandler(async (req, res) => {
       { teamMembers: regex }
     ];
   }
+
+  return filter;
+};
+
+/**
+ * Admin portal: List all participation submissions
+ */
+const listParticipations = asyncHandler(async (req, res) => {
+  const { page, limit, skip } = getPagination(req.query, 20);
+  const filter = buildParticipationFilter(req.query);
 
   const [participations, totalRecords, counts] = await Promise.all([
     Participation.find(filter)
@@ -98,6 +107,70 @@ const listParticipations = asyncHandler(async (req, res) => {
     },
     currentUser: req.user
   });
+});
+
+/**
+ * Export Participations to Excel (.xlsx)
+ */
+const exportParticipationsExcel = asyncHandler(async (req, res) => {
+  const filter = buildParticipationFilter(req.query);
+  const participations = await Participation.find(filter)
+    .populate('reviewedBy', 'name email')
+    .sort({ createdAt: -1 });
+
+  const workbook = await exportService.exportParticipationsToExcel(participations);
+
+  await auditService.log({
+    user: req.user._id,
+    userName: req.user.name,
+    userRole: req.user.role,
+    action: AUDIT_ACTIONS.EXPORT_REPORT,
+    module: AUDIT_MODULES.PARTICIPATIONS,
+    description: `Exported ${participations.length} performance registrations to Excel (.xlsx)`,
+    req
+  });
+
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  );
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="CSE_Performance_Registrations_${Date.now()}.xlsx"`
+  );
+
+  await workbook.xlsx.write(res);
+  res.end();
+});
+
+/**
+ * Export Participations to CSV (.csv)
+ */
+const exportParticipationsCSV = asyncHandler(async (req, res) => {
+  const filter = buildParticipationFilter(req.query);
+  const participations = await Participation.find(filter)
+    .populate('reviewedBy', 'name email')
+    .sort({ createdAt: -1 });
+
+  const csvContent = exportService.exportParticipationsToCSV(participations);
+
+  await auditService.log({
+    user: req.user._id,
+    userName: req.user.name,
+    userRole: req.user.role,
+    action: AUDIT_ACTIONS.EXPORT_REPORT,
+    module: AUDIT_MODULES.PARTICIPATIONS,
+    description: `Exported ${participations.length} performance registrations to CSV`,
+    req
+  });
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="CSE_Performance_Registrations_${Date.now()}.csv"`
+  );
+
+  res.status(200).send(csvContent);
 });
 
 /**
@@ -169,6 +242,8 @@ const deleteParticipation = asyncHandler(async (req, res) => {
 module.exports = {
   submitParticipationAPI,
   listParticipations,
+  exportParticipationsExcel,
+  exportParticipationsCSV,
   toggleReview,
   deleteParticipation
 };
